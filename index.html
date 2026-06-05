@@ -33,13 +33,14 @@
       bottom: 0;
       z-index: 20;
       transition: transform 0.3s ease;
+      overflow-y: auto;
     }
 
     .sidebar-header {
       font-size: 1.5rem;
       font-weight: 700;
       letter-spacing: -0.3px;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
       padding-left: 0.5rem;
       color: #f0f9e8;
     }
@@ -51,12 +52,12 @@
     .nav-menu {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.3rem;
       flex: 1;
     }
 
     .nav-item {
-      padding: 0.8rem 1rem;
+      padding: 0.7rem 1rem;
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -69,12 +70,12 @@
       border: none;
       width: 100%;
       text-align: left;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     .nav-item i {
       font-style: normal;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       width: 24px;
       text-align: center;
     }
@@ -89,6 +90,15 @@
       color: white;
       font-weight: 600;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .log-badge {
+      background: #ef4444;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.7rem;
+      margin-left: auto;
     }
 
     .logout-btn {
@@ -114,7 +124,7 @@
     .main-content {
       margin-left: 260px;
       flex: 1;
-      padding: 1.8rem 2rem;
+      padding: 1.5rem 2rem;
       background: #f8fafc;
       min-height: 100vh;
       width: 100%;
@@ -124,7 +134,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       flex-wrap: wrap;
       gap: 1rem;
     }
@@ -173,7 +183,7 @@
       border-radius: 20px;
       padding: 1.5rem;
       box-shadow: 0 6px 18px rgba(0,0,0,0.04);
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       border: 1px solid #e9eef3;
     }
 
@@ -183,7 +193,7 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
     }
 
     select, input {
@@ -220,6 +230,9 @@
     .btn-danger {
       background: #b91c1c;
     }
+    .btn-danger:hover {
+      background: #dc2626;
+    }
     .btn-sm {
       padding: 0.35rem 1rem;
       font-size: 0.8rem;
@@ -228,7 +241,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     th {
       text-align: left;
@@ -236,6 +249,7 @@
       color: #475569;
       font-weight: 600;
       border-bottom: 2px solid #e2e8f0;
+      white-space: nowrap;
     }
     td {
       padding: 0.7rem 0.5rem;
@@ -247,9 +261,15 @@
       font-size: 0.75rem;
       font-weight: 600;
       background: #e2e8f0;
+      white-space: nowrap;
     }
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-active { background: #d1fae5; color: #065f46; }
+    .status-completed { background: #dbeafe; color: #1e40af; }
+    .status-failed { background: #fee2e2; color: #991b1b; }
+    .status-rejected { background: #fce7f3; color: #9d174d; }
 
-    .login-container {
+    .login-container, .setup-container {
       max-width: 420px;
       margin: 5rem auto;
       background: white;
@@ -257,37 +277,68 @@
       border-radius: 28px;
       box-shadow: 0 20px 35px rgba(0,0,0,0.08);
     }
-    
-    .setup-container {
-      max-width: 450px;
-      margin: 3rem auto;
-      background: white;
-      padding: 2.5rem;
-      border-radius: 28px;
-      box-shadow: 0 20px 35px rgba(0,0,0,0.08);
-    }
-    
+
     .hidden {
       display: none !important;
     }
-    
+
     .toggle-link {
       color: #1e4a2c;
       cursor: pointer;
       text-decoration: underline;
       font-size: 0.9rem;
     }
-    
-    .error-message {
-      color: #dc2626;
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
+
+    .error-message { color: #dc2626; font-size: 0.85rem; margin-top: 0.5rem; }
+    .success-message { color: #16a34a; font-size: 0.85rem; margin-top: 0.5rem; }
+
+    .log-entry {
+      padding: 0.8rem;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
     }
-    
-    .success-message {
-      color: #16a34a;
+    .log-entry:hover { background: #f8fafc; }
+    .log-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .log-icon.info { background: #dbeafe; }
+    .log-icon.success { background: #d1fae5; }
+    .log-icon.warning { background: #fef3c7; }
+    .log-icon.error { background: #fee2e2; }
+    .log-time {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      white-space: nowrap;
+    }
+    .log-message { flex: 1; }
+    .log-detail { color: #64748b; font-size: 0.8rem; }
+
+    .pagination {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    .pagination button {
+      padding: 0.4rem 0.8rem;
       font-size: 0.85rem;
-      margin-top: 0.5rem;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      align-items: center;
     }
 
     @media (max-width: 768px) {
@@ -297,13 +348,11 @@
       .main-content {
         margin-left: 0;
       }
-      .mobile-show-sidebar {
-        transform: translateX(0);
-      }
     }
   </style>
 </head>
 <body>
+  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">🌾 Agri<span>Agent</span></div>
     <div class="nav-menu">
@@ -314,10 +363,12 @@
       <button class="nav-item" data-page="reports"><i>⚠️</i> Reports</button>
       <button class="nav-item" data-page="equipment"><i>🚜</i> Equipment</button>
       <button class="nav-item" data-page="shops"><i>🏪</i> Shops</button>
+      <button class="nav-item" data-page="logs"><i>📋</i> Activity Logs <span class="log-badge" id="logCount" style="display:none;">0</span></button>
     </div>
     <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
   </aside>
 
+  <!-- Main Content -->
   <main class="main-content" id="mainContent">
     <!-- Login Screen -->
     <div id="loginScreen" class="login-container">
@@ -350,18 +401,94 @@
   </main>
 
   <script>
-    // Point to your Koyeb server
+    // ==================== CONFIGURATION ====================
     const API_BASE = 'https://payable-rozamond-school1660440-91bb5cb8.koyeb.app';
     let authToken = localStorage.getItem('adminToken') || '';
 
-    // DOM Elements
+    // ==================== LOCAL LOGGING SYSTEM ====================
+    // Store logs in localStorage as a simple activity log
+    const LOGS_KEY = 'agriagent_admin_logs';
+    
+    function getLogs() {
+      try {
+        return JSON.parse(localStorage.getItem(LOGS_KEY) || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function addLog(action, details, type = 'info') {
+      const logs = getLogs();
+      const logEntry = {
+        id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+        timestamp: new Date().toISOString(),
+        action,
+        details: details || '',
+        type, // 'info', 'success', 'warning', 'error'
+        admin: localStorage.getItem('adminUsername') || 'Unknown'
+      };
+      logs.unshift(logEntry); // Add to beginning
+      
+      // Keep only last 500 logs
+      if (logs.length > 500) logs.length = 500;
+      
+      localStorage.setItem(LOGS_KEY, JSON.stringify(logs));
+      
+      // Update log badge
+      updateLogBadge();
+      
+      // Console log for debugging
+      console.log(`[ADMIN LOG] ${logEntry.type.toUpperCase()}: ${action}`, details);
+      
+      return logEntry;
+    }
+
+    function updateLogBadge() {
+      const logs = getLogs();
+      const badge = document.getElementById('logCount');
+      if (badge) {
+        const recentLogs = logs.filter(l => {
+          const logDate = new Date(l.timestamp);
+          const now = new Date();
+          return (now - logDate) < 3600000; // Last hour
+        });
+        badge.textContent = recentLogs.length || '0';
+        badge.style.display = recentLogs.length > 0 ? 'inline' : 'none';
+      }
+    }
+
+    function clearLogs() {
+      if (confirm('Are you sure you want to clear all activity logs?')) {
+        localStorage.removeItem(LOGS_KEY);
+        addLog('Logs cleared', 'All activity logs have been cleared', 'warning');
+        updateLogBadge();
+      }
+    }
+
+    function exportLogs() {
+      const logs = getLogs();
+      const csv = 'Timestamp,Action,Details,Type,Admin\n' + 
+        logs.map(l => `"${l.timestamp}","${l.action}","${l.details}","${l.type}","${l.admin}"`).join('\n');
+      
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `admin-logs-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      addLog('Logs exported', 'Activity logs exported as CSV', 'info');
+    }
+
+    // ==================== DOM ELEMENTS ====================
     const loginScreen = document.getElementById('loginScreen');
     const setupScreen = document.getElementById('setupScreen');
     const appContent = document.getElementById('appContent');
     const navItems = document.querySelectorAll('.nav-item');
     const logoutBtn = document.getElementById('logoutBtn');
 
-    // API helper
+    // ==================== API HELPER ====================
     const api = async (url, method = 'GET', body = null) => {
       const headers = { 'Content-Type': 'application/json' };
       if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
@@ -369,31 +496,49 @@
       const options = { method, headers };
       if (body) options.body = JSON.stringify(body);
       
-      const res = await fetch(`${API_BASE}${url}`, options);
-      const data = await res.json();
-      
-      if (!res.ok && data.error) {
-        throw new Error(data.error);
+      const startTime = Date.now();
+      try {
+        const res = await fetch(`${API_BASE}${url}`, options);
+        const data = await res.json();
+        const duration = Date.now() - startTime;
+        
+        if (!res.ok && data.error) {
+          addLog(`API Error: ${method} ${url}`, `${res.status}: ${data.error} (${duration}ms)`, 'error');
+          throw new Error(data.error);
+        }
+        
+        // Log successful API calls (optional, can be verbose)
+        // addLog(`API: ${method} ${url}`, `Status: ${res.status} (${duration}ms)`, 'info');
+        
+        return data;
+      } catch (e) {
+        if (e.message !== 'Failed to fetch') {
+          addLog(`API Failed: ${method} ${url}`, e.message, 'error');
+        }
+        throw e;
       }
-      
-      return data;
     };
 
-    // Check authentication
+    // ==================== AUTH ====================
     const checkAuth = async () => {
       if (authToken) {
         try {
-          // Verify token is still valid
-          await api('/api/admin/session');
-          loginScreen.classList.add('hidden');
-          setupScreen.classList.add('hidden');
-          appContent.classList.remove('hidden');
-          loadPage('dashboard');
-          return;
+          const session = await api('/api/admin/session');
+          if (session.success) {
+            localStorage.setItem('adminUsername', session.admin?.username || 'Unknown');
+            loginScreen.classList.add('hidden');
+            setupScreen.classList.add('hidden');
+            appContent.classList.remove('hidden');
+            updateLogBadge();
+            addLog('Session restored', `Admin: ${session.admin?.username}`, 'success');
+            loadPage('dashboard');
+            return;
+          }
         } catch (e) {
-          // Token expired or invalid
+          addLog('Session expired', 'Token invalid or expired', 'warning');
           authToken = '';
           localStorage.removeItem('adminToken');
+          localStorage.removeItem('adminUsername');
         }
       }
       
@@ -402,7 +547,7 @@
       appContent.classList.add('hidden');
     };
 
-    // Login
+    // Login Handler
     document.getElementById('loginSubmit').addEventListener('click', async () => {
       const username = document.getElementById('loginUsername').value.trim();
       const password = document.getElementById('loginPassword').value;
@@ -411,6 +556,7 @@
       
       if (!username || !password) {
         errorEl.textContent = 'Please enter username and password';
+        addLog('Login attempt failed', 'Missing credentials', 'warning');
         return;
       }
       
@@ -419,16 +565,20 @@
         if (data.success && data.token) {
           authToken = data.token;
           localStorage.setItem('adminToken', authToken);
+          localStorage.setItem('adminUsername', data.admin?.username || username);
+          addLog('Admin logged in', `User: ${data.admin?.username || username}, Role: ${data.admin?.role}`, 'success');
           checkAuth();
         } else {
           errorEl.textContent = data.error || 'Login failed';
+          addLog('Login failed', `Invalid credentials for: ${username}`, 'error');
         }
       } catch (e) {
         errorEl.textContent = e.message || 'Connection error';
+        addLog('Login error', e.message, 'error');
       }
     });
 
-    // Setup/Register Admin
+    // Setup Handler
     document.getElementById('setupSubmit').addEventListener('click', async () => {
       const username = document.getElementById('setupUsername').value.trim();
       const email = document.getElementById('setupEmail').value.trim();
@@ -446,32 +596,30 @@
       
       try {
         const data = await api('/api/admin/setup', 'POST', {
-          setupKey,
-          username,
-          password,
-          email
+          setupKey, username, password, email
         });
         
         if (data.success) {
           messageEl.textContent = 'Admin account created successfully! You can now login.';
           messageEl.className = 'success-message';
+          addLog('Admin account created', `Username: ${username}, Email: ${email}`, 'success');
           
-          // Clear form
           document.getElementById('setupUsername').value = '';
           document.getElementById('setupEmail').value = '';
           document.getElementById('setupPassword').value = '';
           
-          // Switch to login after 2 seconds
           setTimeout(() => {
             document.getElementById('showLoginLink').click();
           }, 2000);
         } else {
           messageEl.textContent = data.error || 'Setup failed';
           messageEl.className = 'error-message';
+          addLog('Admin setup failed', data.error, 'error');
         }
       } catch (e) {
         messageEl.textContent = e.message || 'Connection error';
         messageEl.className = 'error-message';
+        addLog('Admin setup error', e.message, 'error');
       }
     });
 
@@ -488,12 +636,14 @@
 
     // Logout
     logoutBtn.addEventListener('click', () => {
+      addLog('Admin logged out', 'Session ended', 'info');
       authToken = '';
       localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminUsername');
       checkAuth();
     });
 
-    // Navigation
+    // ==================== NAVIGATION ====================
     navItems.forEach(item => {
       item.addEventListener('click', (e) => {
         document.querySelector('.nav-item.active')?.classList.remove('active');
@@ -503,7 +653,7 @@
       });
     });
 
-    // Load page content
+    // ==================== PAGE LOADER ====================
     async function loadPage(page) {
       if (!authToken) {
         checkAuth();
@@ -511,7 +661,9 @@
       }
       
       const content = document.getElementById('appContent');
-      content.innerHTML = '<p style="padding:2rem;">Loading...</p>';
+      content.innerHTML = '<p style="padding:2rem; text-align:center;">⏳ Loading...</p>';
+      
+      addLog(`Navigated to ${page}`, '', 'info');
       
       try {
         switch(page) {
@@ -522,10 +674,12 @@
           case 'reports': await renderReports(content); break;
           case 'equipment': await renderEquipment(content); break;
           case 'shops': await renderShops(content); break;
+          case 'logs': await renderLogs(content); break;
           default: content.innerHTML = '<p>Page not found.</p>';
         }
       } catch (err) {
-        content.innerHTML = `<p>Error loading page: ${err.message}</p>`;
+        content.innerHTML = `<p style="color:red;">Error loading page: ${err.message}</p>`;
+        addLog(`Page load error: ${page}`, err.message, 'error');
         if (err.message.includes('Authentication') || err.message.includes('token')) {
           authToken = '';
           localStorage.removeItem('adminToken');
@@ -534,12 +688,14 @@
       }
     }
 
-    // Render Dashboard
+    // ==================== DASHBOARD ====================
     async function renderDashboard(container) {
       try {
         const stats = await api('/api/admin/stats');
         if (!stats.success) throw new Error('Failed to load stats');
         const s = stats.stats;
+        const logs = getLogs();
+        const recentLogs = logs.slice(0, 5);
         
         container.innerHTML = `
           <div class="top-bar">
@@ -580,13 +736,30 @@
               <div class="stat-label">Pending Reports</div>
             </div>
           </div>
+          
+          <div class="section-card">
+            <div class="flex-row">
+              <h3 style="margin:0;">📋 Recent Activity</h3>
+              <button class="btn-sm" onclick="loadPage('logs')">View All Logs</button>
+            </div>
+            ${recentLogs.length > 0 ? recentLogs.map(log => `
+              <div class="log-entry">
+                <div class="log-icon ${log.type || 'info'}">${log.type === 'error' ? '❌' : log.type === 'warning' ? '⚠️' : log.type === 'success' ? '✅' : 'ℹ️'}</div>
+                <div class="log-message">
+                  <strong>${log.action}</strong>
+                  <div class="log-detail">${log.details || ''}</div>
+                </div>
+                <div class="log-time">${new Date(log.timestamp).toLocaleString()}</div>
+              </div>
+            `).join('') : '<p style="text-align:center; color:#94a3b8;">No recent activity</p>'}
+          </div>
         `;
       } catch (e) {
         container.innerHTML = `<p>Error: ${e.message}</p>`;
       }
     }
 
-    // Render Users
+    // ==================== USERS ====================
     async function renderUsers(container) {
       try {
         const data = await api('/api/admin/users?limit=50');
@@ -621,11 +794,11 @@
                       <td>${u.verification?.isVerified ? '✅' : '❌'}</td>
                       <td>${u.isActive ? '✅' : '❌'}</td>
                       <td>
-                        <button class="btn-sm" onclick="window.toggleUser('${u._id}')">
+                        <button class="btn-sm" onclick="window.toggleUser('${u._id}', '${u.profile?.name || 'Unknown'}', ${u.isActive})">
                           ${u.isActive ? 'Deactivate' : 'Activate'}
                         </button>
                         ${!u.verification?.isVerified ? 
-                          `<button class="btn-sm" onclick="window.verifyUser('${u._id}')" style="margin-left:4px;">Verify</button>` 
+                          `<button class="btn-sm" onclick="window.verifyUser('${u._id}', '${u.profile?.name || 'Unknown'}')" style="margin-left:4px;">Verify</button>` 
                           : ''}
                       </td>
                     </tr>
@@ -636,21 +809,28 @@
           </div>
         `;
         
-        window.toggleUser = async (id) => {
+        window.toggleUser = async (id, name, isActive) => {
+          const action = isActive ? 'deactivate' : 'activate';
+          if (!confirm(`Are you sure you want to ${action} user "${name}"?`)) return;
           try {
             await api(`/api/admin/users/${id}/toggle`, 'PUT');
+            addLog(`User ${action}d`, `User: ${name} (${id})`, isActive ? 'warning' : 'success');
             loadPage('users');
           } catch (e) {
             alert('Error: ' + e.message);
+            addLog(`Failed to ${action} user`, `User: ${name} - ${e.message}`, 'error');
           }
         };
         
-        window.verifyUser = async (id) => {
+        window.verifyUser = async (id, name) => {
+          if (!confirm(`Verify user "${name}"?`)) return;
           try {
             await api(`/api/admin/users/${id}/verify`, 'PUT');
+            addLog('User verified', `User: ${name} (${id})`, 'success');
             loadPage('users');
           } catch (e) {
             alert('Error: ' + e.message);
+            addLog('User verification failed', `User: ${name} - ${e.message}`, 'error');
           }
         };
       } catch (e) {
@@ -658,7 +838,7 @@
       }
     }
 
-    // Render Ads
+    // ==================== ADS ====================
     async function renderAds(container) {
       try {
         const data = await api('/api/admin/ads?limit=50');
@@ -690,11 +870,11 @@
                       <td>${ad.advertiserId?.profile?.name || 'N/A'}</td>
                       <td>${ad.type || 'banner'}</td>
                       <td>₹${ad.budget || 0}</td>
-                      <td><span class="status-badge">${ad.status}</span></td>
-                      <td><span class="status-badge">${ad.paymentStatus || 'pending'}</span></td>
+                      <td><span class="status-badge status-${ad.status}">${ad.status}</span></td>
+                      <td><span class="status-badge status-${ad.paymentStatus || 'pending'}">${ad.paymentStatus || 'pending'}</span></td>
                       <td>
-                        <select onchange="window.updateAdStatus('${ad._id}', this.value)" style="padding:0.3rem;">
-                          <option value="">Change Status</option>
+                        <select onchange="window.updateAdStatus('${ad._id}', '${ad.title || 'Untitled'}', this.value)" style="padding:0.3rem;">
+                          <option value="">Change</option>
                           <option value="active">Active</option>
                           <option value="paused">Paused</option>
                           <option value="completed">Complete</option>
@@ -709,13 +889,15 @@
           </div>
         `;
         
-        window.updateAdStatus = async (id, status) => {
+        window.updateAdStatus = async (id, title, status) => {
           if (!status) return;
           try {
             await api(`/api/admin/ads/${id}/status`, 'PUT', { status });
+            addLog(`Ad status updated`, `Ad: "${title}" → ${status}`, 'info');
             loadPage('ads');
           } catch (e) {
             alert('Error: ' + e.message);
+            addLog(`Ad status update failed`, `Ad: "${title}" - ${e.message}`, 'error');
           }
         };
       } catch (e) {
@@ -723,7 +905,7 @@
       }
     }
 
-    // Render Payments
+    // ==================== PAYMENTS ====================
     async function renderPayments(container) {
       try {
         const data = await api('/api/admin/payments?limit=50');
@@ -752,11 +934,11 @@
                       <td>${p.userId?.profile?.name || 'N/A'}</td>
                       <td>₹${p.amount || 0}</td>
                       <td>${p.utrNumber || '-'}</td>
-                      <td><span class="status-badge">${p.status}</span></td>
+                      <td><span class="status-badge status-${p.status}">${p.status}</span></td>
                       <td>
                         ${p.status === 'pending_verification' ? `
-                          <button class="btn-sm" onclick="window.verifyPayment('${p._id}')">✅ Approve</button>
-                          <button class="btn-sm btn-danger" onclick="window.rejectPayment('${p._id}')" style="margin-left:4px;">❌ Reject</button>
+                          <button class="btn-sm" onclick="window.verifyPayment('${p._id}', '${p.userId?.profile?.name || 'Unknown'}', ${p.amount})">✅ Approve</button>
+                          <button class="btn-sm btn-danger" onclick="window.rejectPayment('${p._id}', '${p.userId?.profile?.name || 'Unknown'}', ${p.amount})" style="margin-left:4px;">❌ Reject</button>
                         ` : '-'}
                       </td>
                     </tr>
@@ -767,22 +949,27 @@
           </div>
         `;
         
-        window.verifyPayment = async (id) => {
+        window.verifyPayment = async (id, user, amount) => {
+          if (!confirm(`Approve payment of ₹${amount} from ${user}?`)) return;
           try {
             await api(`/api/admin/payments/${id}/verify`, 'PUT');
+            addLog('Payment approved', `User: ${user}, Amount: ₹${amount}`, 'success');
             loadPage('payments');
           } catch (e) {
             alert('Error: ' + e.message);
+            addLog('Payment approval failed', `User: ${user} - ${e.message}`, 'error');
           }
         };
         
-        window.rejectPayment = async (id) => {
-          if (!confirm('Are you sure you want to reject this payment?')) return;
+        window.rejectPayment = async (id, user, amount) => {
+          if (!confirm(`Reject payment of ₹${amount} from ${user}?`)) return;
           try {
             await api(`/api/admin/payments/${id}/reject`, 'PUT');
+            addLog('Payment rejected', `User: ${user}, Amount: ₹${amount}`, 'warning');
             loadPage('payments');
           } catch (e) {
             alert('Error: ' + e.message);
+            addLog('Payment rejection failed', `User: ${user} - ${e.message}`, 'error');
           }
         };
       } catch (e) {
@@ -790,7 +977,7 @@
       }
     }
 
-    // Render Reports
+    // ==================== REPORTS ====================
     async function renderReports(container) {
       try {
         const data = await api('/api/admin/reports?limit=50');
@@ -819,9 +1006,9 @@
                       <td>${r.reporterId?.profile?.name || 'N/A'}</td>
                       <td>${r.type}</td>
                       <td>${r.reason}</td>
-                      <td><span class="status-badge">${r.status}</span></td>
+                      <td><span class="status-badge status-${r.status}">${r.status}</span></td>
                       <td>
-                        <select onchange="window.updateReportStatus('${r._id}', this.value)" style="padding:0.3rem;">
+                        <select onchange="window.updateReportStatus('${r._id}', '${r.reason}', this.value)" style="padding:0.3rem;">
                           <option value="">Update</option>
                           <option value="reviewed">Reviewed</option>
                           <option value="resolved">Resolved</option>
@@ -835,13 +1022,15 @@
           </div>
         `;
         
-        window.updateReportStatus = async (id, status) => {
+        window.updateReportStatus = async (id, reason, status) => {
           if (!status) return;
           try {
             await api(`/api/admin/reports/${id}`, 'PUT', { status });
+            addLog(`Report updated`, `Reason: "${reason}" → ${status}`, 'info');
             loadPage('reports');
           } catch (e) {
             alert('Error: ' + e.message);
+            addLog(`Report update failed`, e.message, 'error');
           }
         };
       } catch (e) {
@@ -849,7 +1038,7 @@
       }
     }
 
-    // Render Equipment
+    // ==================== EQUIPMENT ====================
     async function renderEquipment(container) {
       try {
         const data = await api('/api/admin/equipment?limit=50');
@@ -883,7 +1072,7 @@
                       <td>${e.isVerified ? '✅' : '❌'}</td>
                       <td>
                         ${!e.isVerified ? 
-                          `<button class="btn-sm" onclick="window.verifyEquipment('${e._id}')">Verify</button>` 
+                          `<button class="btn-sm" onclick="window.verifyEquipment('${e._id}', '${e.name}')">Verify</button>` 
                           : '-'}
                       </td>
                     </tr>
@@ -894,12 +1083,14 @@
           </div>
         `;
         
-        window.verifyEquipment = async (id) => {
+        window.verifyEquipment = async (id, name) => {
           try {
             await api(`/api/admin/equipment/${id}/verify`, 'PUT');
+            addLog('Equipment verified', `Equipment: ${name}`, 'success');
             loadPage('equipment');
           } catch (e) {
             alert('Error: ' + e.message);
+            addLog('Equipment verification failed', `${name}: ${e.message}`, 'error');
           }
         };
       } catch (e) {
@@ -907,7 +1098,7 @@
       }
     }
 
-    // Render Shops
+    // ==================== SHOPS ====================
     async function renderShops(container) {
       try {
         const data = await api('/api/admin/shops?limit=50');
@@ -943,7 +1134,7 @@
                       <td>${s.isVerified ? '✅' : '❌'}</td>
                       <td>
                         ${!s.isVerified ? 
-                          `<button class="btn-sm" onclick="window.verifyShop('${s._id}')">Verify</button>` 
+                          `<button class="btn-sm" onclick="window.verifyShop('${s._id}', '${s.name}')">Verify</button>` 
                           : '-'}
                       </td>
                     </tr>
@@ -954,12 +1145,14 @@
           </div>
         `;
         
-        window.verifyShop = async (id) => {
+        window.verifyShop = async (id, name) => {
           try {
             await api(`/api/admin/shops/${id}/verify`, 'PUT');
+            addLog('Shop verified', `Shop: ${name}`, 'success');
             loadPage('shops');
           } catch (e) {
             alert('Error: ' + e.message);
+            addLog('Shop verification failed', `${name}: ${e.message}`, 'error');
           }
         };
       } catch (e) {
@@ -967,8 +1160,79 @@
       }
     }
 
-    // Initialize
+    // ==================== ACTIVITY LOGS PAGE ====================
+    async function renderLogs(container) {
+      const logs = getLogs();
+      
+      container.innerHTML = `
+        <div class="top-bar">
+          <h2 class="page-title">📋 Activity Logs</h2>
+          <div class="filter-group">
+            <span class="admin-badge">${logs.length} entries</span>
+            <button class="btn-sm btn-outline" onclick="exportLogs()">📥 Export CSV</button>
+            <button class="btn-sm btn-danger" onclick="clearLogs()">🗑️ Clear All</button>
+          </div>
+        </div>
+        
+        <div class="section-card">
+          <div class="flex-row">
+            <h3 style="margin:0;">All Activities</h3>
+            <div class="filter-group">
+              <select id="logFilter" onchange="filterLogs()">
+                <option value="all">All Types</option>
+                <option value="info">ℹ️ Info</option>
+                <option value="success">✅ Success</option>
+                <option value="warning">⚠️ Warning</option>
+                <option value="error">❌ Error</option>
+              </select>
+              <input type="text" id="logSearch" placeholder="Search logs..." oninput="filterLogs()" style="width:200px;">
+            </div>
+          </div>
+          
+          <div id="logsList">
+            ${logs.length > 0 ? logs.map(log => `
+              <div class="log-entry" data-type="${log.type || 'info'}" data-search="${log.action} ${log.details} ${log.admin}">
+                <div class="log-icon ${log.type || 'info'}">${log.type === 'error' ? '❌' : log.type === 'warning' ? '⚠️' : log.type === 'success' ? '✅' : 'ℹ️'}</div>
+                <div class="log-message">
+                  <strong>${log.action}</strong>
+                  <div class="log-detail">${log.details || 'No details'}</div>
+                  <div style="font-size:0.7rem; color:#94a3b8;">By: ${log.admin || 'System'}</div>
+                </div>
+                <div class="log-time">${new Date(log.timestamp).toLocaleString()}</div>
+              </div>
+            `).join('') : '<p style="text-align:center; padding:2rem; color:#94a3b8;">No logs recorded yet</p>'}
+          </div>
+        </div>
+      `;
+      
+      // Store filter functions globally
+      window.filterLogs = () => {
+        const filterType = document.getElementById('logFilter')?.value || 'all';
+        const searchTerm = (document.getElementById('logSearch')?.value || '').toLowerCase();
+        const entries = document.querySelectorAll('.log-entry');
+        
+        entries.forEach(entry => {
+          const type = entry.dataset.type;
+          const searchData = entry.dataset.search || '';
+          const typeMatch = filterType === 'all' || type === filterType;
+          const searchMatch = !searchTerm || searchData.toLowerCase().includes(searchTerm);
+          entry.style.display = typeMatch && searchMatch ? 'flex' : 'none';
+        });
+      };
+      
+      window.exportLogs = exportLogs;
+      window.clearLogs = clearLogs;
+    }
+
+    // ==================== INITIALIZATION ====================
+    updateLogBadge();
     checkAuth();
+    
+    // Log page load
+    addLog('Admin panel loaded', 'Page initialized', 'info');
+    
+    // Update log badge every 30 seconds
+    setInterval(updateLogBadge, 30000);
   </script>
 </body>
 </html>

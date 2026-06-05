@@ -5,49 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>AgriAgent · Admin Panel</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f4f6f9;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #f1f5f9;
       color: #1e293b;
       display: flex;
       min-height: 100vh;
     }
 
+    /* Sidebar */
     .sidebar {
       width: 260px;
       background: linear-gradient(180deg, #0f2b1e 0%, #1a3b2b 100%);
       color: #e2e8f0;
+      padding: 1.5rem 1rem;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 20;
       display: flex;
       flex-direction: column;
-      padding: 1.5rem 1rem;
-      box-shadow: 4px 0 20px rgba(0,0,0,0.08);
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      z-index: 20;
-      transition: transform 0.3s ease;
-      overflow-y: auto;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.1);
     }
 
     .sidebar-header {
       font-size: 1.5rem;
       font-weight: 700;
-      letter-spacing: -0.3px;
       margin-bottom: 2rem;
       padding-left: 0.5rem;
       color: #f0f9e8;
     }
-
-    .sidebar-header span {
-      color: #86c553;
-    }
+    .sidebar-header span { color: #86c553; }
 
     .nav-menu {
       display: flex;
@@ -57,11 +46,11 @@
     }
 
     .nav-item {
-      padding: 0.7rem 1rem;
+      padding: 0.75rem 1rem;
       border-radius: 12px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       font-weight: 500;
       color: #cbd5e1;
       cursor: pointer;
@@ -73,118 +62,69 @@
       font-size: 0.9rem;
     }
 
-    .nav-item i {
-      font-style: normal;
-      font-size: 1.1rem;
-      width: 24px;
-      text-align: center;
-    }
-
-    .nav-item:hover {
-      background: rgba(255,255,255,0.08);
-      color: white;
-    }
-
+    .nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+    
     .nav-item.active {
       background: #2c5e3b;
       color: white;
       font-weight: 600;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    .log-badge {
-      background: #ef4444;
-      color: white;
-      border-radius: 50%;
-      padding: 2px 6px;
-      font-size: 0.7rem;
-      margin-left: auto;
     }
 
     .logout-btn {
       margin-top: auto;
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.1);
       color: #f1f5f9;
-      border: 1px solid rgba(255,255,255,0.15);
-      padding: 0.7rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 0.75rem;
       border-radius: 12px;
-      font-weight: 500;
       cursor: pointer;
-      transition: 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      font-weight: 500;
     }
-    .logout-btn:hover {
-      background: rgba(220,38,38,0.25);
-      border-color: #ef4444;
-    }
+    .logout-btn:hover { background: rgba(220,38,38,0.3); }
 
+    /* Main Content */
     .main-content {
       margin-left: 260px;
       flex: 1;
-      padding: 1.5rem 2rem;
-      background: #f8fafc;
+      padding: 2rem;
       min-height: 100vh;
-      width: 100%;
     }
 
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       flex-wrap: wrap;
       gap: 1rem;
     }
-    .page-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #0f2b1e;
-    }
-    .admin-badge {
-      background: #e9f5e5;
-      color: #1e4a2c;
-      padding: 0.4rem 1.2rem;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
+
+    .page-title { font-size: 1.8rem; font-weight: 700; color: #0f2b1e; }
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 1.2rem;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
       margin-bottom: 2rem;
     }
+
     .stat-card {
       background: white;
-      padding: 1.5rem 1.2rem;
-      border-radius: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-      display: flex;
-      flex-direction: column;
-      border: 1px solid #edf2f7;
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
     }
-    .stat-value {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #0f2b1e;
-    }
-    .stat-label {
-      color: #475569;
-      font-size: 0.9rem;
-      margin-top: 4px;
-    }
+    .stat-value { font-size: 2rem; font-weight: 700; color: #0f2b1e; }
+    .stat-label { color: #64748b; font-size: 0.9rem; margin-top: 4px; }
 
     .section-card {
       background: white;
-      border-radius: 20px;
+      border-radius: 16px;
       padding: 1.5rem;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
       margin-bottom: 1.5rem;
-      border: 1px solid #e9eef3;
+      border: 1px solid #e2e8f0;
     }
 
     .flex-row {
@@ -198,45 +138,32 @@
 
     select, input {
       padding: 0.6rem 1rem;
-      border-radius: 12px;
-      border: 1px solid #d1d9e6;
-      background: white;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
       font-size: 0.9rem;
       outline: none;
     }
+    select:focus, input:focus { border-color: #2c5e3b; }
 
     button {
       background: #1e4a2c;
       color: white;
       border: none;
-      padding: 0.6rem 1.4rem;
-      border-radius: 30px;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
       transition: 0.2s;
       font-size: 0.9rem;
     }
-    button:hover {
-      background: #2c5e3b;
-    }
-    .btn-outline {
-      background: transparent;
-      border: 1px solid #1e4a2c;
-      color: #1e4a2c;
-    }
-    .btn-outline:hover {
-      background: #eef6ed;
-    }
-    .btn-danger {
-      background: #b91c1c;
-    }
-    .btn-danger:hover {
-      background: #dc2626;
-    }
-    .btn-sm {
-      padding: 0.35rem 1rem;
-      font-size: 0.8rem;
-    }
+    button:hover { background: #2c5e3b; }
+    
+    .btn-danger { background: #dc2626; }
+    .btn-danger:hover { background: #b91c1c; }
+    
+    .btn-sm { padding: 0.35rem 0.8rem; font-size: 0.8rem; }
+    .btn-outline { background: white; border: 1px solid #1e4a2c; color: #1e4a2c; }
+    .btn-outline:hover { background: #f0fdf4; }
 
     table {
       width: 100%;
@@ -255,99 +182,52 @@
       padding: 0.7rem 0.5rem;
       border-bottom: 1px solid #f1f5f9;
     }
+
     .status-badge {
-      padding: 0.2rem 0.8rem;
-      border-radius: 20px;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
       font-size: 0.75rem;
       font-weight: 600;
-      background: #e2e8f0;
-      white-space: nowrap;
+      display: inline-block;
     }
     .status-pending { background: #fef3c7; color: #92400e; }
     .status-active { background: #d1fae5; color: #065f46; }
     .status-completed { background: #dbeafe; color: #1e40af; }
     .status-failed { background: #fee2e2; color: #991b1b; }
-    .status-rejected { background: #fce7f3; color: #9d174d; }
 
-    .login-container, .setup-container {
-      max-width: 420px;
-      margin: 5rem auto;
+    .login-container {
+      max-width: 400px;
+      margin: 100px auto;
       background: white;
       padding: 2.5rem;
-      border-radius: 28px;
-      box-shadow: 0 20px 35px rgba(0,0,0,0.08);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
 
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
-    .toggle-link {
-      color: #1e4a2c;
-      cursor: pointer;
-      text-decoration: underline;
-      font-size: 0.9rem;
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      color: white;
+      font-weight: 500;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
     }
-
-    .error-message { color: #dc2626; font-size: 0.85rem; margin-top: 0.5rem; }
-    .success-message { color: #16a34a; font-size: 0.85rem; margin-top: 0.5rem; }
-
-    .log-entry {
-      padding: 0.8rem;
-      border-bottom: 1px solid #f1f5f9;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 1rem;
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
-    .log-entry:hover { background: #f8fafc; }
-    .log-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
-    .log-icon.info { background: #dbeafe; }
-    .log-icon.success { background: #d1fae5; }
-    .log-icon.warning { background: #fef3c7; }
-    .log-icon.error { background: #fee2e2; }
-    .log-time {
-      font-size: 0.75rem;
-      color: #94a3b8;
-      white-space: nowrap;
-    }
-    .log-message { flex: 1; }
-    .log-detail { color: #64748b; font-size: 0.8rem; }
-
-    .pagination {
-      display: flex;
-      gap: 0.5rem;
-      justify-content: center;
-      margin-top: 1rem;
-    }
-    .pagination button {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.85rem;
-    }
-
-    .filter-group {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      align-items: center;
-    }
+    .toast-success { background: #16a34a; }
+    .toast-error { background: #dc2626; }
+    .toast-info { background: #2563eb; }
 
     @media (max-width: 768px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-      .main-content {
-        margin-left: 0;
-      }
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; }
     }
   </style>
 </head>
@@ -355,315 +235,145 @@
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">🌾 Agri<span>Agent</span></div>
-    <div class="nav-menu">
-      <button class="nav-item active" data-page="dashboard"><i>📊</i> Dashboard</button>
-      <button class="nav-item" data-page="users"><i>👥</i> Users</button>
-      <button class="nav-item" data-page="ads"><i>📢</i> Ads</button>
-      <button class="nav-item" data-page="payments"><i>💳</i> Payments</button>
-      <button class="nav-item" data-page="reports"><i>⚠️</i> Reports</button>
-      <button class="nav-item" data-page="equipment"><i>🚜</i> Equipment</button>
-      <button class="nav-item" data-page="shops"><i>🏪</i> Shops</button>
-      <button class="nav-item" data-page="logs"><i>📋</i> Activity Logs <span class="log-badge" id="logCount" style="display:none;">0</span></button>
-    </div>
-    <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+    <nav class="nav-menu">
+      <button class="nav-item active" data-page="dashboard">📊 Dashboard</button>
+      <button class="nav-item" data-page="users">👥 Users</button>
+      <button class="nav-item" data-page="ads">📢 Ads</button>
+      <button class="nav-item" data-page="payments">💳 Payments</button>
+      <button class="nav-item" data-page="reports">⚠️ Reports</button>
+      <button class="nav-item" data-page="equipment">🚜 Equipment</button>
+      <button class="nav-item" data-page="shops">🏪 Shops</button>
+    </nav>
+    <button class="logout-btn" onclick="logout()">🚪 Logout</button>
   </aside>
 
   <!-- Main Content -->
   <main class="main-content" id="mainContent">
     <!-- Login Screen -->
-    <div id="loginScreen" class="login-container">
-      <h2 style="margin-bottom:1.5rem; color:#0f2b1e;">Admin Login</h2>
-      <input type="text" id="loginUsername" placeholder="Username or Email" style="width:100%; margin-bottom:1rem;"><br>
-      <input type="password" id="loginPassword" placeholder="Password" style="width:100%; margin-bottom:1.5rem;"><br>
-      <button id="loginSubmit" style="width:100%;">Sign in</button>
-      <p style="margin-top:1rem; text-align:center;">
-        <span class="toggle-link" id="showSetupLink">Create Admin Account</span>
-      </p>
-      <p id="loginError" class="error-message"></p>
-    </div>
-
-    <!-- Setup Screen -->
-    <div id="setupScreen" class="setup-container hidden">
-      <h2 style="margin-bottom:1.5rem; color:#0f2b1e;">Create Admin Account</h2>
-      <input type="text" id="setupUsername" placeholder="Username" style="width:100%; margin-bottom:1rem;"><br>
-      <input type="email" id="setupEmail" placeholder="Email" style="width:100%; margin-bottom:1rem;"><br>
-      <input type="password" id="setupPassword" placeholder="Password" style="width:100%; margin-bottom:1rem;"><br>
-      <input type="text" id="setupKey" placeholder="Setup Key" style="width:100%; margin-bottom:1.5rem;" value="maya@1660440"><br>
-      <button id="setupSubmit" style="width:100%;">Create Admin</button>
-      <p style="margin-top:1rem; text-align:center;">
-        <span class="toggle-link" id="showLoginLink">Back to Login</span>
-      </p>
-      <p id="setupMessage"></p>
+    <div id="loginScreen">
+      <div class="login-container">
+        <h2 style="margin-bottom:1.5rem; color:#0f2b1e;">Admin Login</h2>
+        <input type="text" id="loginUsername" placeholder="Username" style="width:100%; margin-bottom:1rem; padding:0.75rem;"><br>
+        <input type="password" id="loginPassword" placeholder="Password" style="width:100%; margin-bottom:1.5rem; padding:0.75rem;"><br>
+        <button onclick="login()" style="width:100%; padding:0.75rem;">Sign In</button>
+        <p id="loginError" style="color:#dc2626; margin-top:0.5rem; font-size:0.9rem;"></p>
+      </div>
     </div>
 
     <!-- App Content -->
     <div id="appContent" class="hidden"></div>
   </main>
 
+  <!-- Toast Container -->
+  <div id="toastContainer"></div>
+
   <script>
-    // ==================== CONFIGURATION ====================
     const API_BASE = 'https://payable-rozamond-school1660440-91bb5cb8.koyeb.app';
     let authToken = localStorage.getItem('adminToken') || '';
 
-    // ==================== LOCAL LOGGING SYSTEM ====================
-    // Store logs in localStorage as a simple activity log
-    const LOGS_KEY = 'agriagent_admin_logs';
-    
-    function getLogs() {
-      try {
-        return JSON.parse(localStorage.getItem(LOGS_KEY) || '[]');
-      } catch {
-        return [];
-      }
+    // Toast notification
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      document.getElementById('toastContainer').appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
     }
 
-    function addLog(action, details, type = 'info') {
-      const logs = getLogs();
-      const logEntry = {
-        id: Date.now().toString(36) + Math.random().toString(36).substr(2),
-        timestamp: new Date().toISOString(),
-        action,
-        details: details || '',
-        type, // 'info', 'success', 'warning', 'error'
-        admin: localStorage.getItem('adminUsername') || 'Unknown'
-      };
-      logs.unshift(logEntry); // Add to beginning
-      
-      // Keep only last 500 logs
-      if (logs.length > 500) logs.length = 500;
-      
-      localStorage.setItem(LOGS_KEY, JSON.stringify(logs));
-      
-      // Update log badge
-      updateLogBadge();
-      
-      // Console log for debugging
-      console.log(`[ADMIN LOG] ${logEntry.type.toUpperCase()}: ${action}`, details);
-      
-      return logEntry;
-    }
-
-    function updateLogBadge() {
-      const logs = getLogs();
-      const badge = document.getElementById('logCount');
-      if (badge) {
-        const recentLogs = logs.filter(l => {
-          const logDate = new Date(l.timestamp);
-          const now = new Date();
-          return (now - logDate) < 3600000; // Last hour
-        });
-        badge.textContent = recentLogs.length || '0';
-        badge.style.display = recentLogs.length > 0 ? 'inline' : 'none';
-      }
-    }
-
-    function clearLogs() {
-      if (confirm('Are you sure you want to clear all activity logs?')) {
-        localStorage.removeItem(LOGS_KEY);
-        addLog('Logs cleared', 'All activity logs have been cleared', 'warning');
-        updateLogBadge();
-      }
-    }
-
-    function exportLogs() {
-      const logs = getLogs();
-      const csv = 'Timestamp,Action,Details,Type,Admin\n' + 
-        logs.map(l => `"${l.timestamp}","${l.action}","${l.details}","${l.type}","${l.admin}"`).join('\n');
-      
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `admin-logs-${new Date().toISOString().split('T')[0]}.csv`;
-      a.click();
-      URL.revokeObjectURL(url);
-      
-      addLog('Logs exported', 'Activity logs exported as CSV', 'info');
-    }
-
-    // ==================== DOM ELEMENTS ====================
-    const loginScreen = document.getElementById('loginScreen');
-    const setupScreen = document.getElementById('setupScreen');
-    const appContent = document.getElementById('appContent');
-    const navItems = document.querySelectorAll('.nav-item');
-    const logoutBtn = document.getElementById('logoutBtn');
-
-    // ==================== API HELPER ====================
-    const api = async (url, method = 'GET', body = null) => {
+    // API helper
+    async function api(url, method = 'GET', body = null) {
       const headers = { 'Content-Type': 'application/json' };
       if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
       
       const options = { method, headers };
       if (body) options.body = JSON.stringify(body);
       
-      const startTime = Date.now();
-      try {
-        const res = await fetch(`${API_BASE}${url}`, options);
-        const data = await res.json();
-        const duration = Date.now() - startTime;
-        
-        if (!res.ok && data.error) {
-          addLog(`API Error: ${method} ${url}`, `${res.status}: ${data.error} (${duration}ms)`, 'error');
-          throw new Error(data.error);
-        }
-        
-        // Log successful API calls (optional, can be verbose)
-        // addLog(`API: ${method} ${url}`, `Status: ${res.status} (${duration}ms)`, 'info');
-        
-        return data;
-      } catch (e) {
-        if (e.message !== 'Failed to fetch') {
-          addLog(`API Failed: ${method} ${url}`, e.message, 'error');
-        }
-        throw e;
-      }
-    };
-
-    // ==================== AUTH ====================
-    const checkAuth = async () => {
-      if (authToken) {
-        try {
-          const session = await api('/api/admin/session');
-          if (session.success) {
-            localStorage.setItem('adminUsername', session.admin?.username || 'Unknown');
-            loginScreen.classList.add('hidden');
-            setupScreen.classList.add('hidden');
-            appContent.classList.remove('hidden');
-            updateLogBadge();
-            addLog('Session restored', `Admin: ${session.admin?.username}`, 'success');
-            loadPage('dashboard');
-            return;
-          }
-        } catch (e) {
-          addLog('Session expired', 'Token invalid or expired', 'warning');
-          authToken = '';
-          localStorage.removeItem('adminToken');
-          localStorage.removeItem('adminUsername');
-        }
+      const response = await fetch(`${API_BASE}${url}`, options);
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP ${response.status}`);
       }
       
-      loginScreen.classList.remove('hidden');
-      setupScreen.classList.add('hidden');
-      appContent.classList.add('hidden');
-    };
+      return data;
+    }
 
-    // Login Handler
-    document.getElementById('loginSubmit').addEventListener('click', async () => {
+    // Check authentication
+    async function checkAuth() {
+      if (!authToken) {
+        showLogin();
+        return false;
+      }
+      
+      try {
+        await api('/api/admin/session');
+        showApp();
+        return true;
+      } catch (e) {
+        authToken = '';
+        localStorage.removeItem('adminToken');
+        showLogin();
+        return false;
+      }
+    }
+
+    function showLogin() {
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('appContent').classList.add('hidden');
+    }
+
+    function showApp() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('appContent').classList.remove('hidden');
+    }
+
+    // Login
+    async function login() {
       const username = document.getElementById('loginUsername').value.trim();
       const password = document.getElementById('loginPassword').value;
       const errorEl = document.getElementById('loginError');
       errorEl.textContent = '';
       
       if (!username || !password) {
-        errorEl.textContent = 'Please enter username and password';
-        addLog('Login attempt failed', 'Missing credentials', 'warning');
+        errorEl.textContent = 'Please enter credentials';
         return;
       }
       
       try {
         const data = await api('/api/admin/login', 'POST', { username, password });
-        if (data.success && data.token) {
+        if (data.success) {
           authToken = data.token;
           localStorage.setItem('adminToken', authToken);
-          localStorage.setItem('adminUsername', data.admin?.username || username);
-          addLog('Admin logged in', `User: ${data.admin?.username || username}, Role: ${data.admin?.role}`, 'success');
-          checkAuth();
-        } else {
-          errorEl.textContent = data.error || 'Login failed';
-          addLog('Login failed', `Invalid credentials for: ${username}`, 'error');
+          showToast('Login successful!', 'success');
+          showApp();
+          loadPage('dashboard');
         }
       } catch (e) {
-        errorEl.textContent = e.message || 'Connection error';
-        addLog('Login error', e.message, 'error');
+        errorEl.textContent = e.message;
+        showToast('Login failed: ' + e.message, 'error');
       }
-    });
+    }
 
-    // Setup Handler
-    document.getElementById('setupSubmit').addEventListener('click', async () => {
-      const username = document.getElementById('setupUsername').value.trim();
-      const email = document.getElementById('setupEmail').value.trim();
-      const password = document.getElementById('setupPassword').value;
-      const setupKey = document.getElementById('setupKey').value.trim();
-      const messageEl = document.getElementById('setupMessage');
-      messageEl.textContent = '';
-      messageEl.className = '';
-      
-      if (!username || !email || !password || !setupKey) {
-        messageEl.textContent = 'All fields are required';
-        messageEl.className = 'error-message';
-        return;
-      }
-      
-      try {
-        const data = await api('/api/admin/setup', 'POST', {
-          setupKey, username, password, email
-        });
-        
-        if (data.success) {
-          messageEl.textContent = 'Admin account created successfully! You can now login.';
-          messageEl.className = 'success-message';
-          addLog('Admin account created', `Username: ${username}, Email: ${email}`, 'success');
-          
-          document.getElementById('setupUsername').value = '';
-          document.getElementById('setupEmail').value = '';
-          document.getElementById('setupPassword').value = '';
-          
-          setTimeout(() => {
-            document.getElementById('showLoginLink').click();
-          }, 2000);
-        } else {
-          messageEl.textContent = data.error || 'Setup failed';
-          messageEl.className = 'error-message';
-          addLog('Admin setup failed', data.error, 'error');
-        }
-      } catch (e) {
-        messageEl.textContent = e.message || 'Connection error';
-        messageEl.className = 'error-message';
-        addLog('Admin setup error', e.message, 'error');
-      }
-    });
-
-    // Toggle between login and setup
-    document.getElementById('showSetupLink').addEventListener('click', () => {
-      loginScreen.classList.add('hidden');
-      setupScreen.classList.remove('hidden');
-    });
-    
-    document.getElementById('showLoginLink').addEventListener('click', () => {
-      setupScreen.classList.add('hidden');
-      loginScreen.classList.remove('hidden');
-    });
-
-    // Logout
-    logoutBtn.addEventListener('click', () => {
-      addLog('Admin logged out', 'Session ended', 'info');
+    function logout() {
       authToken = '';
       localStorage.removeItem('adminToken');
-      localStorage.removeItem('adminUsername');
-      checkAuth();
-    });
+      showLogin();
+      showToast('Logged out', 'info');
+    }
 
-    // ==================== NAVIGATION ====================
-    navItems.forEach(item => {
-      item.addEventListener('click', (e) => {
+    // Navigation
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', function() {
         document.querySelector('.nav-item.active')?.classList.remove('active');
-        item.classList.add('active');
-        const page = item.dataset.page;
-        loadPage(page);
+        this.classList.add('active');
+        loadPage(this.dataset.page);
       });
     });
 
-    // ==================== PAGE LOADER ====================
+    // Load pages
     async function loadPage(page) {
-      if (!authToken) {
-        checkAuth();
-        return;
-      }
-      
       const content = document.getElementById('appContent');
-      content.innerHTML = '<p style="padding:2rem; text-align:center;">⏳ Loading...</p>';
-      
-      addLog(`Navigated to ${page}`, '', 'info');
+      content.innerHTML = '<div style="text-align:center; padding:3rem;">Loading...</div>';
       
       try {
         switch(page) {
@@ -674,565 +384,328 @@
           case 'reports': await renderReports(content); break;
           case 'equipment': await renderEquipment(content); break;
           case 'shops': await renderShops(content); break;
-          case 'logs': await renderLogs(content); break;
-          default: content.innerHTML = '<p>Page not found.</p>';
         }
-      } catch (err) {
-        content.innerHTML = `<p style="color:red;">Error loading page: ${err.message}</p>`;
-        addLog(`Page load error: ${page}`, err.message, 'error');
-        if (err.message.includes('Authentication') || err.message.includes('token')) {
-          authToken = '';
-          localStorage.removeItem('adminToken');
-          checkAuth();
+      } catch (e) {
+        content.innerHTML = `<div style="color:#dc2626; padding:2rem;">Error: ${e.message}</div>`;
+        if (e.message.includes('Authentication') || e.message.includes('token')) {
+          logout();
         }
       }
     }
 
-    // ==================== DASHBOARD ====================
+    // Dashboard
     async function renderDashboard(container) {
-      try {
-        const stats = await api('/api/admin/stats');
-        if (!stats.success) throw new Error('Failed to load stats');
-        const s = stats.stats;
-        const logs = getLogs();
-        const recentLogs = logs.slice(0, 5);
-        
-        container.innerHTML = `
-          <div class="top-bar">
-            <h2 class="page-title">Dashboard</h2>
-            <span class="admin-badge">Admin</span>
-          </div>
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-value">${s.totalUsers || 0}</div>
-              <div class="stat-label">Total Users</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">${s.activeLabourers || 0}</div>
-              <div class="stat-label">Active Labourers</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">${s.totalEquipment || 0}</div>
-              <div class="stat-label">Equipment</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">${s.totalProduce || 0}</div>
-              <div class="stat-label">Produce Listings</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">${s.pendingPayments || 0}</div>
-              <div class="stat-label">Pending Payments</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">${s.activeAds || 0}</div>
-              <div class="stat-label">Active Ads</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">${s.totalBookings || 0}</div>
-              <div class="stat-label">Pending Bookings</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">${s.pendingReports || 0}</div>
-              <div class="stat-label">Pending Reports</div>
-            </div>
-          </div>
-          
-          <div class="section-card">
-            <div class="flex-row">
-              <h3 style="margin:0;">📋 Recent Activity</h3>
-              <button class="btn-sm" onclick="loadPage('logs')">View All Logs</button>
-            </div>
-            ${recentLogs.length > 0 ? recentLogs.map(log => `
-              <div class="log-entry">
-                <div class="log-icon ${log.type || 'info'}">${log.type === 'error' ? '❌' : log.type === 'warning' ? '⚠️' : log.type === 'success' ? '✅' : 'ℹ️'}</div>
-                <div class="log-message">
-                  <strong>${log.action}</strong>
-                  <div class="log-detail">${log.details || ''}</div>
-                </div>
-                <div class="log-time">${new Date(log.timestamp).toLocaleString()}</div>
-              </div>
-            `).join('') : '<p style="text-align:center; color:#94a3b8;">No recent activity</p>'}
-          </div>
-        `;
-      } catch (e) {
-        container.innerHTML = `<p>Error: ${e.message}</p>`;
-      }
-    }
-
-    // ==================== USERS ====================
-    async function renderUsers(container) {
-      try {
-        const data = await api('/api/admin/users?limit=50');
-        const users = data.users || [];
-        
-        container.innerHTML = `
-          <div class="top-bar">
-            <h2 class="page-title">Users</h2>
-            <span class="admin-badge">${users.length} users</span>
-          </div>
-          <div class="section-card">
-            <div style="overflow-x:auto;">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Role</th>
-                    <th>Verified</th>
-                    <th>Active</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${users.map(u => `
-                    <tr>
-                      <td>${u.profile?.name || 'N/A'}</td>
-                      <td>${u.email || 'N/A'}</td>
-                      <td>${u.profile?.phone || '-'}</td>
-                      <td>${u.role || 'farmer'}</td>
-                      <td>${u.verification?.isVerified ? '✅' : '❌'}</td>
-                      <td>${u.isActive ? '✅' : '❌'}</td>
-                      <td>
-                        <button class="btn-sm" onclick="window.toggleUser('${u._id}', '${u.profile?.name || 'Unknown'}', ${u.isActive})">
-                          ${u.isActive ? 'Deactivate' : 'Activate'}
-                        </button>
-                        ${!u.verification?.isVerified ? 
-                          `<button class="btn-sm" onclick="window.verifyUser('${u._id}', '${u.profile?.name || 'Unknown'}')" style="margin-left:4px;">Verify</button>` 
-                          : ''}
-                      </td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
-        
-        window.toggleUser = async (id, name, isActive) => {
-          const action = isActive ? 'deactivate' : 'activate';
-          if (!confirm(`Are you sure you want to ${action} user "${name}"?`)) return;
-          try {
-            await api(`/api/admin/users/${id}/toggle`, 'PUT');
-            addLog(`User ${action}d`, `User: ${name} (${id})`, isActive ? 'warning' : 'success');
-            loadPage('users');
-          } catch (e) {
-            alert('Error: ' + e.message);
-            addLog(`Failed to ${action} user`, `User: ${name} - ${e.message}`, 'error');
-          }
-        };
-        
-        window.verifyUser = async (id, name) => {
-          if (!confirm(`Verify user "${name}"?`)) return;
-          try {
-            await api(`/api/admin/users/${id}/verify`, 'PUT');
-            addLog('User verified', `User: ${name} (${id})`, 'success');
-            loadPage('users');
-          } catch (e) {
-            alert('Error: ' + e.message);
-            addLog('User verification failed', `User: ${name} - ${e.message}`, 'error');
-          }
-        };
-      } catch (e) {
-        container.innerHTML = `<p>Error: ${e.message}</p>`;
-      }
-    }
-
-    // ==================== ADS ====================
-    async function renderAds(container) {
-      try {
-        const data = await api('/api/admin/ads?limit=50');
-        const ads = data.ads || [];
-        
-        container.innerHTML = `
-          <div class="top-bar">
-            <h2 class="page-title">Advertisements</h2>
-            <span class="admin-badge">${ads.length} ads</span>
-          </div>
-          <div class="section-card">
-            <div style="overflow-x:auto;">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Advertiser</th>
-                    <th>Type</th>
-                    <th>Budget</th>
-                    <th>Status</th>
-                    <th>Payment</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${ads.map(ad => `
-                    <tr>
-                      <td>${ad.title || 'Untitled'}</td>
-                      <td>${ad.advertiserId?.profile?.name || 'N/A'}</td>
-                      <td>${ad.type || 'banner'}</td>
-                      <td>₹${ad.budget || 0}</td>
-                      <td><span class="status-badge status-${ad.status}">${ad.status}</span></td>
-                      <td><span class="status-badge status-${ad.paymentStatus || 'pending'}">${ad.paymentStatus || 'pending'}</span></td>
-                      <td>
-                        <select onchange="window.updateAdStatus('${ad._id}', '${ad.title || 'Untitled'}', this.value)" style="padding:0.3rem;">
-                          <option value="">Change</option>
-                          <option value="active">Active</option>
-                          <option value="paused">Paused</option>
-                          <option value="completed">Complete</option>
-                          <option value="rejected">Reject</option>
-                        </select>
-                      </td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
-        
-        window.updateAdStatus = async (id, title, status) => {
-          if (!status) return;
-          try {
-            await api(`/api/admin/ads/${id}/status`, 'PUT', { status });
-            addLog(`Ad status updated`, `Ad: "${title}" → ${status}`, 'info');
-            loadPage('ads');
-          } catch (e) {
-            alert('Error: ' + e.message);
-            addLog(`Ad status update failed`, `Ad: "${title}" - ${e.message}`, 'error');
-          }
-        };
-      } catch (e) {
-        container.innerHTML = `<p>Error: ${e.message}</p>`;
-      }
-    }
-
-    // ==================== PAYMENTS ====================
-    async function renderPayments(container) {
-      try {
-        const data = await api('/api/admin/payments?limit=50');
-        const payments = data.payments || [];
-        
-        container.innerHTML = `
-          <div class="top-bar">
-            <h2 class="page-title">Payments</h2>
-            <span class="admin-badge">${payments.length} payments</span>
-          </div>
-          <div class="section-card">
-            <div style="overflow-x:auto;">
-              <table>
-                <thead>
-                  <tr>
-                    <th>User</th>
-                    <th>Amount</th>
-                    <th>UTR</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${payments.map(p => `
-                    <tr>
-                      <td>${p.userId?.profile?.name || 'N/A'}</td>
-                      <td>₹${p.amount || 0}</td>
-                      <td>${p.utrNumber || '-'}</td>
-                      <td><span class="status-badge status-${p.status}">${p.status}</span></td>
-                      <td>
-                        ${p.status === 'pending_verification' ? `
-                          <button class="btn-sm" onclick="window.verifyPayment('${p._id}', '${p.userId?.profile?.name || 'Unknown'}', ${p.amount})">✅ Approve</button>
-                          <button class="btn-sm btn-danger" onclick="window.rejectPayment('${p._id}', '${p.userId?.profile?.name || 'Unknown'}', ${p.amount})" style="margin-left:4px;">❌ Reject</button>
-                        ` : '-'}
-                      </td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
-        
-        window.verifyPayment = async (id, user, amount) => {
-          if (!confirm(`Approve payment of ₹${amount} from ${user}?`)) return;
-          try {
-            await api(`/api/admin/payments/${id}/verify`, 'PUT');
-            addLog('Payment approved', `User: ${user}, Amount: ₹${amount}`, 'success');
-            loadPage('payments');
-          } catch (e) {
-            alert('Error: ' + e.message);
-            addLog('Payment approval failed', `User: ${user} - ${e.message}`, 'error');
-          }
-        };
-        
-        window.rejectPayment = async (id, user, amount) => {
-          if (!confirm(`Reject payment of ₹${amount} from ${user}?`)) return;
-          try {
-            await api(`/api/admin/payments/${id}/reject`, 'PUT');
-            addLog('Payment rejected', `User: ${user}, Amount: ₹${amount}`, 'warning');
-            loadPage('payments');
-          } catch (e) {
-            alert('Error: ' + e.message);
-            addLog('Payment rejection failed', `User: ${user} - ${e.message}`, 'error');
-          }
-        };
-      } catch (e) {
-        container.innerHTML = `<p>Error: ${e.message}</p>`;
-      }
-    }
-
-    // ==================== REPORTS ====================
-    async function renderReports(container) {
-      try {
-        const data = await api('/api/admin/reports?limit=50');
-        const reports = data.reports || [];
-        
-        container.innerHTML = `
-          <div class="top-bar">
-            <h2 class="page-title">Reports</h2>
-            <span class="admin-badge">${reports.length} reports</span>
-          </div>
-          <div class="section-card">
-            <div style="overflow-x:auto;">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Reporter</th>
-                    <th>Type</th>
-                    <th>Reason</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${reports.map(r => `
-                    <tr>
-                      <td>${r.reporterId?.profile?.name || 'N/A'}</td>
-                      <td>${r.type}</td>
-                      <td>${r.reason}</td>
-                      <td><span class="status-badge status-${r.status}">${r.status}</span></td>
-                      <td>
-                        <select onchange="window.updateReportStatus('${r._id}', '${r.reason}', this.value)" style="padding:0.3rem;">
-                          <option value="">Update</option>
-                          <option value="reviewed">Reviewed</option>
-                          <option value="resolved">Resolved</option>
-                        </select>
-                      </td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
-        
-        window.updateReportStatus = async (id, reason, status) => {
-          if (!status) return;
-          try {
-            await api(`/api/admin/reports/${id}`, 'PUT', { status });
-            addLog(`Report updated`, `Reason: "${reason}" → ${status}`, 'info');
-            loadPage('reports');
-          } catch (e) {
-            alert('Error: ' + e.message);
-            addLog(`Report update failed`, e.message, 'error');
-          }
-        };
-      } catch (e) {
-        container.innerHTML = `<p>Error: ${e.message}</p>`;
-      }
-    }
-
-    // ==================== EQUIPMENT ====================
-    async function renderEquipment(container) {
-      try {
-        const data = await api('/api/admin/equipment?limit=50');
-        const equipment = data.equipment || [];
-        
-        container.innerHTML = `
-          <div class="top-bar">
-            <h2 class="page-title">Equipment</h2>
-            <span class="admin-badge">${equipment.length} items</span>
-          </div>
-          <div class="section-card">
-            <div style="overflow-x:auto;">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Owner</th>
-                    <th>Price/Day</th>
-                    <th>Verified</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${equipment.map(e => `
-                    <tr>
-                      <td>${e.name || 'N/A'}</td>
-                      <td>${e.category || 'N/A'}</td>
-                      <td>${e.ownerId?.profile?.name || 'N/A'}</td>
-                      <td>₹${e.pricing?.perDay || 0}</td>
-                      <td>${e.isVerified ? '✅' : '❌'}</td>
-                      <td>
-                        ${!e.isVerified ? 
-                          `<button class="btn-sm" onclick="window.verifyEquipment('${e._id}', '${e.name}')">Verify</button>` 
-                          : '-'}
-                      </td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
-        
-        window.verifyEquipment = async (id, name) => {
-          try {
-            await api(`/api/admin/equipment/${id}/verify`, 'PUT');
-            addLog('Equipment verified', `Equipment: ${name}`, 'success');
-            loadPage('equipment');
-          } catch (e) {
-            alert('Error: ' + e.message);
-            addLog('Equipment verification failed', `${name}: ${e.message}`, 'error');
-          }
-        };
-      } catch (e) {
-        container.innerHTML = `<p>Error: ${e.message}</p>`;
-      }
-    }
-
-    // ==================== SHOPS ====================
-    async function renderShops(container) {
-      try {
-        const data = await api('/api/admin/shops?limit=50');
-        const shops = data.shops || [];
-        
-        container.innerHTML = `
-          <div class="top-bar">
-            <h2 class="page-title">Fertilizer Shops</h2>
-            <span class="admin-badge">${shops.length} shops</span>
-          </div>
-          <div class="section-card">
-            <div style="overflow-x:auto;">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Shop Name</th>
-                    <th>Owner</th>
-                    <th>Village</th>
-                    <th>District</th>
-                    <th>Rating</th>
-                    <th>Verified</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${shops.map(s => `
-                    <tr>
-                      <td>${s.name || 'N/A'}</td>
-                      <td>${s.ownerName || 'N/A'}</td>
-                      <td>${s.location?.village || 'N/A'}</td>
-                      <td>${s.location?.district || 'N/A'}</td>
-                      <td>⭐ ${s.rating || 0} (${s.totalRatings || 0})</td>
-                      <td>${s.isVerified ? '✅' : '❌'}</td>
-                      <td>
-                        ${!s.isVerified ? 
-                          `<button class="btn-sm" onclick="window.verifyShop('${s._id}', '${s.name}')">Verify</button>` 
-                          : '-'}
-                      </td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
-        
-        window.verifyShop = async (id, name) => {
-          try {
-            await api(`/api/admin/shops/${id}/verify`, 'PUT');
-            addLog('Shop verified', `Shop: ${name}`, 'success');
-            loadPage('shops');
-          } catch (e) {
-            alert('Error: ' + e.message);
-            addLog('Shop verification failed', `${name}: ${e.message}`, 'error');
-          }
-        };
-      } catch (e) {
-        container.innerHTML = `<p>Error: ${e.message}</p>`;
-      }
-    }
-
-    // ==================== ACTIVITY LOGS PAGE ====================
-    async function renderLogs(container) {
-      const logs = getLogs();
+      const data = await api('/api/admin/stats');
+      const s = data.stats;
       
       container.innerHTML = `
         <div class="top-bar">
-          <h2 class="page-title">📋 Activity Logs</h2>
-          <div class="filter-group">
-            <span class="admin-badge">${logs.length} entries</span>
-            <button class="btn-sm btn-outline" onclick="exportLogs()">📥 Export CSV</button>
-            <button class="btn-sm btn-danger" onclick="clearLogs()">🗑️ Clear All</button>
-          </div>
+          <h1 class="page-title">Dashboard</h1>
+          <span class="status-badge status-active">Super Admin</span>
         </div>
-        
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-value">${s.totalUsers}</div><div class="stat-label">Total Users</div></div>
+          <div class="stat-card"><div class="stat-value">${s.activeLabourers}</div><div class="stat-label">Active Labourers</div></div>
+          <div class="stat-card"><div class="stat-value">${s.totalEquipment}</div><div class="stat-label">Equipment</div></div>
+          <div class="stat-card"><div class="stat-value">${s.totalProduce}</div><div class="stat-label">Produce</div></div>
+          <div class="stat-card"><div class="stat-value">${s.pendingPayments}</div><div class="stat-label">Pending Payments</div></div>
+          <div class="stat-card"><div class="stat-value">${s.activeAds}</div><div class="stat-label">Active Ads</div></div>
+          <div class="stat-card"><div class="stat-value">${s.totalBookings}</div><div class="stat-label">Bookings</div></div>
+          <div class="stat-card"><div class="stat-value">${s.pendingReports}</div><div class="stat-label">Pending Reports</div></div>
+        </div>
+      `;
+    }
+
+    // Users
+    async function renderUsers(container) {
+      const data = await api('/api/admin/users?limit=50');
+      const users = data.users || [];
+      
+      container.innerHTML = `
+        <div class="top-bar">
+          <h1 class="page-title">Users</h1>
+          <span class="status-badge status-active">${users.length} users</span>
+        </div>
         <div class="section-card">
-          <div class="flex-row">
-            <h3 style="margin:0;">All Activities</h3>
-            <div class="filter-group">
-              <select id="logFilter" onchange="filterLogs()">
-                <option value="all">All Types</option>
-                <option value="info">ℹ️ Info</option>
-                <option value="success">✅ Success</option>
-                <option value="warning">⚠️ Warning</option>
-                <option value="error">❌ Error</option>
-              </select>
-              <input type="text" id="logSearch" placeholder="Search logs..." oninput="filterLogs()" style="width:200px;">
-            </div>
-          </div>
-          
-          <div id="logsList">
-            ${logs.length > 0 ? logs.map(log => `
-              <div class="log-entry" data-type="${log.type || 'info'}" data-search="${log.action} ${log.details} ${log.admin}">
-                <div class="log-icon ${log.type || 'info'}">${log.type === 'error' ? '❌' : log.type === 'warning' ? '⚠️' : log.type === 'success' ? '✅' : 'ℹ️'}</div>
-                <div class="log-message">
-                  <strong>${log.action}</strong>
-                  <div class="log-detail">${log.details || 'No details'}</div>
-                  <div style="font-size:0.7rem; color:#94a3b8;">By: ${log.admin || 'System'}</div>
-                </div>
-                <div class="log-time">${new Date(log.timestamp).toLocaleString()}</div>
-              </div>
-            `).join('') : '<p style="text-align:center; padding:2rem; color:#94a3b8;">No logs recorded yet</p>'}
+          <div style="overflow-x:auto;">
+            <table>
+              <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Verified</th><th>Active</th><th>Actions</th></tr></thead>
+              <tbody>
+                ${users.map(u => `
+                  <tr>
+                    <td>${u.profile?.name || 'N/A'}</td>
+                    <td>${u.email || 'N/A'}</td>
+                    <td>${u.profile?.phone || '-'}</td>
+                    <td>${u.role || 'farmer'}</td>
+                    <td>${u.verification?.isVerified ? '✅' : '❌'}</td>
+                    <td>${u.isActive ? '✅' : '❌'}</td>
+                    <td>
+                      <button class="btn-sm" onclick="toggleUser('${u._id}', ${u.isActive})">${u.isActive ? 'Deactivate' : 'Activate'}</button>
+                      ${!u.verification?.isVerified ? `<button class="btn-sm" onclick="verifyUser('${u._id}')" style="margin-left:4px;">Verify</button>` : ''}
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
           </div>
         </div>
       `;
       
-      // Store filter functions globally
-      window.filterLogs = () => {
-        const filterType = document.getElementById('logFilter')?.value || 'all';
-        const searchTerm = (document.getElementById('logSearch')?.value || '').toLowerCase();
-        const entries = document.querySelectorAll('.log-entry');
-        
-        entries.forEach(entry => {
-          const type = entry.dataset.type;
-          const searchData = entry.dataset.search || '';
-          const typeMatch = filterType === 'all' || type === filterType;
-          const searchMatch = !searchTerm || searchData.toLowerCase().includes(searchTerm);
-          entry.style.display = typeMatch && searchMatch ? 'flex' : 'none';
-        });
+      window.toggleUser = async (id, isActive) => {
+        try {
+          await api(`/api/admin/users/${id}/toggle`, 'PUT');
+          showToast(`User ${isActive ? 'deactivated' : 'activated'}`, 'success');
+          loadPage('users');
+        } catch (e) { showToast(e.message, 'error'); }
       };
       
-      window.exportLogs = exportLogs;
-      window.clearLogs = clearLogs;
+      window.verifyUser = async (id) => {
+        try {
+          await api(`/api/admin/users/${id}/verify`, 'PUT');
+          showToast('User verified', 'success');
+          loadPage('users');
+        } catch (e) { showToast(e.message, 'error'); }
+      };
     }
 
-    // ==================== INITIALIZATION ====================
-    updateLogBadge();
-    checkAuth();
-    
-    // Log page load
-    addLog('Admin panel loaded', 'Page initialized', 'info');
-    
-    // Update log badge every 30 seconds
-    setInterval(updateLogBadge, 30000);
+    // Ads
+    async function renderAds(container) {
+      const data = await api('/api/admin/ads?limit=50');
+      const ads = data.ads || [];
+      
+      container.innerHTML = `
+        <div class="top-bar">
+          <h1 class="page-title">Advertisements</h1>
+          <span class="status-badge status-active">${ads.length} ads</span>
+        </div>
+        <div class="section-card">
+          <div style="overflow-x:auto;">
+            <table>
+              <thead><tr><th>Title</th><th>Advertiser</th><th>Type</th><th>Budget</th><th>Status</th><th>Payment</th><th>Actions</th></tr></thead>
+              <tbody>
+                ${ads.map(ad => `
+                  <tr>
+                    <td>${ad.title || 'Untitled'}</td>
+                    <td>${ad.advertiserId?.profile?.name || 'N/A'}</td>
+                    <td>${ad.type}</td>
+                    <td>₹${ad.budget || 0}</td>
+                    <td><span class="status-badge status-${ad.status}">${ad.status}</span></td>
+                    <td><span class="status-badge status-${ad.paymentStatus || 'pending'}">${ad.paymentStatus || 'pending'}</span></td>
+                    <td>
+                      <select onchange="updateAdStatus('${ad._id}', this.value)" style="padding:0.3rem;">
+                        <option value="">Change</option>
+                        <option value="active">Active</option>
+                        <option value="paused">Paused</option>
+                        <option value="completed">Complete</option>
+                        <option value="rejected">Reject</option>
+                      </select>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+      
+      window.updateAdStatus = async (id, status) => {
+        if (!status) return;
+        try {
+          await api(`/api/admin/ads/${id}/status`, 'PUT', { status });
+          showToast(`Ad status updated to ${status}`, 'success');
+          loadPage('ads');
+        } catch (e) { showToast(e.message, 'error'); }
+      };
+    }
+
+    // Payments
+    async function renderPayments(container) {
+      const data = await api('/api/admin/payments?limit=50');
+      const payments = data.payments || [];
+      
+      container.innerHTML = `
+        <div class="top-bar">
+          <h1 class="page-title">Payments</h1>
+          <span class="status-badge status-active">${payments.length} payments</span>
+        </div>
+        <div class="section-card">
+          <div style="overflow-x:auto;">
+            <table>
+              <thead><tr><th>User</th><th>Amount</th><th>UTR</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody>
+                ${payments.map(p => `
+                  <tr>
+                    <td>${p.userId?.profile?.name || 'N/A'}</td>
+                    <td>₹${p.amount || 0}</td>
+                    <td>${p.utrNumber || '-'}</td>
+                    <td><span class="status-badge status-${p.status}">${p.status}</span></td>
+                    <td>
+                      ${p.status === 'pending_verification' ? `
+                        <button class="btn-sm" onclick="verifyPayment('${p._id}')">✅ Approve</button>
+                        <button class="btn-sm btn-danger" onclick="rejectPayment('${p._id}')" style="margin-left:4px;">❌ Reject</button>
+                      ` : '-'}
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+      
+      window.verifyPayment = async (id) => {
+        if (!confirm('Approve this payment?')) return;
+        try {
+          await api(`/api/admin/payments/${id}/verify`, 'PUT');
+          showToast('Payment approved', 'success');
+          loadPage('payments');
+        } catch (e) { showToast(e.message, 'error'); }
+      };
+      
+      window.rejectPayment = async (id) => {
+        if (!confirm('Reject this payment?')) return;
+        try {
+          await api(`/api/admin/payments/${id}/reject`, 'PUT');
+          showToast('Payment rejected', 'info');
+          loadPage('payments');
+        } catch (e) { showToast(e.message, 'error'); }
+      };
+    }
+
+    // Reports
+    async function renderReports(container) {
+      const data = await api('/api/admin/reports?limit=50');
+      const reports = data.reports || [];
+      
+      container.innerHTML = `
+        <div class="top-bar">
+          <h1 class="page-title">Reports</h1>
+          <span class="status-badge status-active">${reports.length} reports</span>
+        </div>
+        <div class="section-card">
+          <div style="overflow-x:auto;">
+            <table>
+              <thead><tr><th>Reporter</th><th>Type</th><th>Reason</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody>
+                ${reports.map(r => `
+                  <tr>
+                    <td>${r.reporterId?.profile?.name || 'N/A'}</td>
+                    <td>${r.type}</td>
+                    <td>${r.reason}</td>
+                    <td><span class="status-badge status-${r.status}">${r.status}</span></td>
+                    <td>
+                      <select onchange="updateReport('${r._id}', this.value)" style="padding:0.3rem;">
+                        <option value="">Update</option>
+                        <option value="reviewed">Reviewed</option>
+                        <option value="resolved">Resolved</option>
+                      </select>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+      
+      window.updateReport = async (id, status) => {
+        if (!status) return;
+        try {
+          await api(`/api/admin/reports/${id}`, 'PUT', { status });
+          showToast(`Report ${status}`, 'success');
+          loadPage('reports');
+        } catch (e) { showToast(e.message, 'error'); }
+      };
+    }
+
+    // Equipment
+    async function renderEquipment(container) {
+      const data = await api('/api/admin/equipment?limit=50');
+      const equipment = data.equipment || [];
+      
+      container.innerHTML = `
+        <div class="top-bar">
+          <h1 class="page-title">Equipment</h1>
+          <span class="status-badge status-active">${equipment.length} items</span>
+        </div>
+        <div class="section-card">
+          <table>
+            <thead><tr><th>Name</th><th>Category</th><th>Owner</th><th>Price/Day</th><th>Verified</th><th>Actions</th></tr></thead>
+            <tbody>
+              ${equipment.map(e => `
+                <tr>
+                  <td>${e.name}</td><td>${e.category}</td>
+                  <td>${e.ownerId?.profile?.name || 'N/A'}</td>
+                  <td>₹${e.pricing?.perDay || 0}</td>
+                  <td>${e.isVerified ? '✅' : '❌'}</td>
+                  <td>${!e.isVerified ? `<button class="btn-sm" onclick="verifyEquip('${e._id}')">Verify</button>` : '-'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+      
+      window.verifyEquip = async (id) => {
+        try {
+          await api(`/api/admin/equipment/${id}/verify`, 'PUT');
+          showToast('Equipment verified', 'success');
+          loadPage('equipment');
+        } catch (e) { showToast(e.message, 'error'); }
+      };
+    }
+
+    // Shops
+    async function renderShops(container) {
+      const data = await api('/api/admin/shops?limit=50');
+      const shops = data.shops || [];
+      
+      container.innerHTML = `
+        <div class="top-bar">
+          <h1 class="page-title">Fertilizer Shops</h1>
+          <span class="status-badge status-active">${shops.length} shops</span>
+        </div>
+        <div class="section-card">
+          <table>
+            <thead><tr><th>Shop Name</th><th>Owner</th><th>Village</th><th>Rating</th><th>Verified</th><th>Actions</th></tr></thead>
+            <tbody>
+              ${shops.map(s => `
+                <tr>
+                  <td>${s.name}</td><td>${s.ownerName || 'N/A'}</td>
+                  <td>${s.location?.village || 'N/A'}</td>
+                  <td>⭐ ${s.rating || 0}</td>
+                  <td>${s.isVerified ? '✅' : '❌'}</td>
+                  <td>${!s.isVerified ? `<button class="btn-sm" onclick="verifyShop('${s._id}')">Verify</button>` : '-'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+      
+      window.verifyShop = async (id) => {
+        try {
+          await api(`/api/admin/shops/${id}/verify`, 'PUT');
+          showToast('Shop verified', 'success');
+          loadPage('shops');
+        } catch (e) { showToast(e.message, 'error'); }
+      };
+    }
+
+    // Initialize
+    checkAuth().then(isAuth => {
+      if (isAuth) loadPage('dashboard');
+    });
+
+    // Allow Enter key for login
+    document.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !document.getElementById('appContent').classList.contains('hidden') === false) {
+        const loginScreen = document.getElementById('loginScreen');
+        if (!loginScreen.classList.contains('hidden')) {
+          login();
+        }
+      }
+    });
   </script>
 </body>
 </html>

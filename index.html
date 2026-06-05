@@ -1,341 +1,974 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriAgent - Admin Dashboard</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; color: #333; }
-        
-        .header { background: linear-gradient(135deg, #16a34a, #15803d); color: #fff; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
-        .header h1 { font-size: 24px; }
-        .header input { padding: 10px 16px; border-radius: 8px; border: none; width: 300px; font-size: 14px; }
-        
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        
-        .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .tab { padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; border: 2px solid #ddd; background: #fff; transition: all 0.2s; }
-        .tab:hover { border-color: #16a34a; }
-        .tab.active { background: #16a34a; color: #fff; border-color: #16a34a; }
-        
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
-        .stat-card { background: #fff; padding: 20px; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-align: center; }
-        .stat-card .number { font-size: 32px; font-weight: 800; color: #16a34a; }
-        .stat-card .label { font-size: 13px; color: #666; margin-top: 4px; }
-        
-        .card { background: #fff; border-radius: 14px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .card h3 { margin-bottom: 16px; color: #16a34a; font-size: 18px; }
-        
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #eee; font-size: 13px; }
-        th { background: #f8fafc; font-weight: 700; color: #555; }
-        tr:hover { background: #f8fafc; }
-        
-        .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block; }
-        .badge-success { background: #dcfce7; color: #16a34a; }
-        .badge-warning { background: #fef3c7; color: #d97706; }
-        .badge-danger { background: #fee2e2; color: #dc2626; }
-        .badge-info { background: #dbeafe; color: #2563eb; }
-        .badge-purple { background: #f3e8ff; color: #7c3aed; }
-        
-        .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; }
-        .btn-green { background: #16a34a; color: #fff; }
-        .btn-green:hover { background: #15803d; }
-        .btn-red { background: #dc2626; color: #fff; }
-        .btn-blue { background: #2563eb; color: #fff; }
-        .btn-purple { background: #7c3aed; color: #fff; }
-        
-        .loading { text-align: center; padding: 40px; color: #666; }
-        .empty { text-align: center; padding: 40px; color: #999; }
-        
-        .api-url { background: #1e293b; color: #e2e8f0; padding: 12px 16px; border-radius: 8px; font-family: monospace; font-size: 13px; margin-bottom: 16px; word-break: break-all; }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
-        .modal.active { display: flex; }
-        .modal-content { background: #fff; border-radius: 16px; padding: 24px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; }
-        .modal-content h3 { margin-bottom: 16px; }
-        .modal-content pre { background: #f1f5f9; padding: 12px; border-radius: 8px; font-size: 12px; overflow-x: auto; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>AgriAgent · Admin Panel</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      color: #1e293b;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(180deg, #0f2b1e 0%, #1a3b2b 100%);
+      color: #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem 1rem;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.08);
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 20;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 2.5rem;
+      padding-left: 0.5rem;
+      color: #f0f9e8;
+    }
+
+    .sidebar-header span {
+      color: #86c553;
+    }
+
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    .nav-item {
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    .nav-item i {
+      font-style: normal;
+      font-size: 1.2rem;
+      width: 24px;
+      text-align: center;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,0.08);
+      color: white;
+    }
+
+    .nav-item.active {
+      background: #2c5e3b;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .logout-btn {
+      margin-top: auto;
+      background: rgba(255,255,255,0.08);
+      color: #f1f5f9;
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 0.7rem;
+      border-radius: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .logout-btn:hover {
+      background: rgba(220,38,38,0.25);
+      border-color: #ef4444;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      padding: 1.8rem 2rem;
+      background: #f8fafc;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .page-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0f2b1e;
+    }
+    .admin-badge {
+      background: #e9f5e5;
+      color: #1e4a2c;
+      padding: 0.4rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: white;
+      padding: 1.5rem 1.2rem;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #edf2f7;
+    }
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #0f2b1e;
+    }
+    .stat-label {
+      color: #475569;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .section-card {
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+      margin-bottom: 2rem;
+      border: 1px solid #e9eef3;
+    }
+
+    .flex-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    select, input {
+      padding: 0.6rem 1rem;
+      border-radius: 12px;
+      border: 1px solid #d1d9e6;
+      background: white;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    button {
+      background: #1e4a2c;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.4rem;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.9rem;
+    }
+    button:hover {
+      background: #2c5e3b;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #1e4a2c;
+      color: #1e4a2c;
+    }
+    .btn-outline:hover {
+      background: #eef6ed;
+    }
+    .btn-danger {
+      background: #b91c1c;
+    }
+    .btn-sm {
+      padding: 0.35rem 1rem;
+      font-size: 0.8rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    th {
+      text-align: left;
+      padding: 0.8rem 0.5rem;
+      color: #475569;
+      font-weight: 600;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    td {
+      padding: 0.7rem 0.5rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .status-badge {
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #e2e8f0;
+    }
+
+    .login-container {
+      max-width: 420px;
+      margin: 5rem auto;
+      background: white;
+      padding: 2.5rem;
+      border-radius: 28px;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.08);
+    }
+    
+    .setup-container {
+      max-width: 450px;
+      margin: 3rem auto;
+      background: white;
+      padding: 2.5rem;
+      border-radius: 28px;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.08);
+    }
+    
+    .hidden {
+      display: none !important;
+    }
+    
+    .toggle-link {
+      color: #1e4a2c;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 0.9rem;
+    }
+    
+    .error-message {
+      color: #dc2626;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+    
+    .success-message {
+      color: #16a34a;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+      .mobile-show-sidebar {
+        transform: translateX(0);
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🌾 AgriAgent Admin</h1>
-        <div>
-            <input type="text" id="apiUrl" placeholder="API Base URL" value="https://payable-rozamond-school1660440-91bb5cb8.koyeb.app">
-            <button class="btn btn-green" onclick="fetchAll()" style="margin-left: 8px;">🔄 Refresh</button>
-        </div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">🌾 Agri<span>Agent</span></div>
+    <div class="nav-menu">
+      <button class="nav-item active" data-page="dashboard"><i>📊</i> Dashboard</button>
+      <button class="nav-item" data-page="users"><i>👥</i> Users</button>
+      <button class="nav-item" data-page="ads"><i>📢</i> Ads</button>
+      <button class="nav-item" data-page="payments"><i>💳</i> Payments</button>
+      <button class="nav-item" data-page="reports"><i>⚠️</i> Reports</button>
+      <button class="nav-item" data-page="equipment"><i>🚜</i> Equipment</button>
+      <button class="nav-item" data-page="shops"><i>🏪</i> Shops</button>
+    </div>
+    <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+  </aside>
+
+  <main class="main-content" id="mainContent">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+      <h2 style="margin-bottom:1.5rem; color:#0f2b1e;">Admin Login</h2>
+      <input type="text" id="loginUsername" placeholder="Username or Email" style="width:100%; margin-bottom:1rem;"><br>
+      <input type="password" id="loginPassword" placeholder="Password" style="width:100%; margin-bottom:1.5rem;"><br>
+      <button id="loginSubmit" style="width:100%;">Sign in</button>
+      <p style="margin-top:1rem; text-align:center;">
+        <span class="toggle-link" id="showSetupLink">Create Admin Account</span>
+      </p>
+      <p id="loginError" class="error-message"></p>
     </div>
 
-    <div class="container">
-        <!-- Stats -->
-        <div class="stats" id="stats"></div>
-
-        <!-- Tabs -->
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab('users')">👤 Users</div>
-            <div class="tab" onclick="switchTab('labourers')">👷 Labourers</div>
-            <div class="tab" onclick="switchTab('contractors')">🏗️ Contractors</div>
-            <div class="tab" onclick="switchTab('equipment')">🚜 Equipment</div>
-            <div class="tab" onclick="switchTab('ads')">📢 Ads</div>
-            <div class="tab" onclick="switchTab('payments')">💳 Payments</div>
-            <div class="tab" onclick="switchTab('problems')">🌿 Problems</div>
-            <div class="tab" onclick="switchTab('shops')">🏪 Shops</div>
-        </div>
-
-        <!-- Content -->
-        <div id="content">
-            <div class="loading">Loading...</div>
-        </div>
+    <!-- Setup Screen -->
+    <div id="setupScreen" class="setup-container hidden">
+      <h2 style="margin-bottom:1.5rem; color:#0f2b1e;">Create Admin Account</h2>
+      <input type="text" id="setupUsername" placeholder="Username" style="width:100%; margin-bottom:1rem;"><br>
+      <input type="email" id="setupEmail" placeholder="Email" style="width:100%; margin-bottom:1rem;"><br>
+      <input type="password" id="setupPassword" placeholder="Password" style="width:100%; margin-bottom:1rem;"><br>
+      <input type="text" id="setupKey" placeholder="Setup Key" style="width:100%; margin-bottom:1.5rem;" value="maya@1660440"><br>
+      <button id="setupSubmit" style="width:100%;">Create Admin</button>
+      <p style="margin-top:1rem; text-align:center;">
+        <span class="toggle-link" id="showLoginLink">Back to Login</span>
+      </p>
+      <p id="setupMessage"></p>
     </div>
 
-    <!-- Detail Modal -->
-    <div class="modal" id="detailModal">
-        <div class="modal-content" id="modalContent"></div>
-    </div>
+    <!-- App Content -->
+    <div id="appContent" class="hidden"></div>
+  </main>
 
-    <script>
-        const API = document.getElementById('apiUrl').value;
-        let currentTab = 'users';
+  <script>
+    // Point to your Koyeb server
+    const API_BASE = 'https://payable-rozamond-school1660440-91bb5cb8.koyeb.app';
+    let authToken = localStorage.getItem('adminToken') || '';
 
-        async function fetchAPI(endpoint) {
-            try {
-                const res = await fetch(`${API}${endpoint}`);
-                return await res.json();
-            } catch (e) {
-                console.error(e);
-                return null;
-            }
+    // DOM Elements
+    const loginScreen = document.getElementById('loginScreen');
+    const setupScreen = document.getElementById('setupScreen');
+    const appContent = document.getElementById('appContent');
+    const navItems = document.querySelectorAll('.nav-item');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // API helper
+    const api = async (url, method = 'GET', body = null) => {
+      const headers = { 'Content-Type': 'application/json' };
+      if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
+      
+      const options = { method, headers };
+      if (body) options.body = JSON.stringify(body);
+      
+      const res = await fetch(`${API_BASE}${url}`, options);
+      const data = await res.json();
+      
+      if (!res.ok && data.error) {
+        throw new Error(data.error);
+      }
+      
+      return data;
+    };
+
+    // Check authentication
+    const checkAuth = async () => {
+      if (authToken) {
+        try {
+          // Verify token is still valid
+          await api('/api/admin/session');
+          loginScreen.classList.add('hidden');
+          setupScreen.classList.add('hidden');
+          appContent.classList.remove('hidden');
+          loadPage('dashboard');
+          return;
+        } catch (e) {
+          // Token expired or invalid
+          authToken = '';
+          localStorage.removeItem('adminToken');
         }
+      }
+      
+      loginScreen.classList.remove('hidden');
+      setupScreen.classList.add('hidden');
+      appContent.classList.add('hidden');
+    };
 
-        async function fetchAll() {
-            document.getElementById('stats').innerHTML = '<div class="loading">Loading stats...</div>';
-            
-            const [users, labourers, contractors, equipment, ads, payments, problems, shops] = await Promise.all([
-                fetchAPI('/api/auth/me').catch(() => ({})),
-                fetchAPI('/api/debug/labourers'),
-                fetchAPI('/api/debug/contractors'),
-                fetchAPI('/api/equipment'),
-                fetchAPI('/api/ads/active?limit=50'),
-                fetchAPI('/api/debug/payments'),
-                fetchAPI('/api/problems'),
-                fetchAPI('/api/fertilizer-shops'),
-            ]);
-
-            document.getElementById('stats').innerHTML = `
-                <div class="stat-card"><div class="number">${labourers?.totalLabourers || 0}</div><div class="label">Labourers</div></div>
-                <div class="stat-card"><div class="number">${contractors?.totalContractors || 0}</div><div class="label">Contractors</div></div>
-                <div class="stat-card"><div class="number">${equipment?.equipment?.length || 0}</div><div class="label">Equipment</div></div>
-                <div class="stat-card"><div class="number">${ads?.ads?.length || 0}</div><div class="label">Active Ads</div></div>
-                <div class="stat-card"><div class="number">${payments?.payments?.length || 0}</div><div class="label">Payments</div></div>
-                <div class="stat-card"><div class="number">${problems?.problems?.length || 0}</div><div class="label">Problems</div></div>
-            `;
-
-            // Store data
-            window.cache = { labourers, contractors, equipment, ads, payments, problems, shops };
-            switchTab(currentTab);
+    // Login
+    document.getElementById('loginSubmit').addEventListener('click', async () => {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const errorEl = document.getElementById('loginError');
+      errorEl.textContent = '';
+      
+      if (!username || !password) {
+        errorEl.textContent = 'Please enter username and password';
+        return;
+      }
+      
+      try {
+        const data = await api('/api/admin/login', 'POST', { username, password });
+        if (data.success && data.token) {
+          authToken = data.token;
+          localStorage.setItem('adminToken', authToken);
+          checkAuth();
+        } else {
+          errorEl.textContent = data.error || 'Login failed';
         }
+      } catch (e) {
+        errorEl.textContent = e.message || 'Connection error';
+      }
+    });
 
-        function switchTab(tab) {
-            currentTab = tab;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-
-            const cache = window.cache || {};
-            const content = document.getElementById('content');
-
-            switch(tab) {
-                case 'users':
-                    content.innerHTML = '<div class="card"><h3>User Management</h3><p>Users are managed through the app. Labourers and contractors are listed in their respective tabs.</p></div>';
-                    break;
-                case 'labourers':
-                    renderLabourers(cache.labourers);
-                    break;
-                case 'contractors':
-                    renderContractors(cache.contractors);
-                    break;
-                case 'equipment':
-                    renderEquipment(cache.equipment);
-                    break;
-                case 'ads':
-                    renderAds(cache.ads);
-                    break;
-                case 'payments':
-                    renderPayments(cache.payments);
-                    break;
-                case 'problems':
-                    renderProblems(cache.problems);
-                    break;
-                case 'shops':
-                    renderShops(cache.shops);
-                    break;
-            }
-        }
-
-        function renderLabourers(data) {
-            if (!data?.labourers?.length) {
-                document.getElementById('content').innerHTML = '<div class="card"><h3>👷 Labourers</h3><div class="empty">No labourers found</div></div>';
-                return;
-            }
-            let html = `<div class="card"><h3>👷 Labourers (${data.totalLabourers})</h3><table><tr><th>Name</th><th>Phone</th><th>Skills</th><th>Experience</th><th>Available</th><th>Location</th></tr>`;
-            data.labourers.forEach(l => {
-                html += `<tr>
-                    <td><strong>${l.name || 'N/A'}</strong></td>
-                    <td>${l.phone || 'N/A'}</td>
-                    <td>${(l.skills || []).map(s => `<span class="badge badge-success">${s}</span>`).join(' ')}</td>
-                    <td>${l.experience || 0} yrs</td>
-                    <td>${l.isAvailable ? '<span class="badge badge-success">Available</span>' : '<span class="badge badge-danger">Unavailable</span>'}</td>
-                    <td>${l.hasLocation ? '📍 Set' : '❌ Not set'}</td>
-                </tr>`;
-            });
-            html += '</table></div>';
-            document.getElementById('content').innerHTML = html;
-        }
-
-        function renderContractors(data) {
-            if (!data?.contractors?.length) {
-                document.getElementById('content').innerHTML = '<div class="card"><h3>🏗️ Contractors</h3><div class="empty">No contractors found</div></div>';
-                return;
-            }
-            let html = `<div class="card"><h3>🏗️ Contractors (${data.totalContractors})</h3><table><tr><th>Company</th><th>Contact</th><th>Phone</th><th>Team</th><th>Crops</th><th>Location</th></tr>`;
-            data.contractors.forEach(c => {
-                html += `<tr>
-                    <td><strong>${c.companyName || c.name || 'N/A'}</strong></td>
-                    <td>${c.name || 'N/A'}</td>
-                    <td>${c.phone || 'N/A'}</td>
-                    <td>${c.teamSize || 'N/A'}</td>
-                    <td>${(c.crops || []).map(cr => `<span class="badge badge-purple">${cr}</span>`).join(' ')}</td>
-                    <td>${c.hasLocation ? '📍 Set' : '❌ Not set'}</td>
-                </tr>`;
-            });
-            html += '</table></div>';
-            document.getElementById('content').innerHTML = html;
-        }
-
-        function renderEquipment(data) {
-            if (!data?.equipment?.length) {
-                document.getElementById('content').innerHTML = '<div class="card"><h3>🚜 Equipment</h3><div class="empty">No equipment listed</div></div>';
-                return;
-            }
-            let html = `<div class="card"><h3>🚜 Equipment (${data.equipment.length})</h3><table><tr><th>Name</th><th>Category</th><th>Price/Day</th><th>Deposit</th><th>Available</th></tr>`;
-            data.equipment.forEach(e => {
-                html += `<tr>
-                    <td><strong>${e.name || 'N/A'}</strong></td>
-                    <td>${e.category || 'N/A'}</td>
-                    <td>₹${e.pricing?.perDay || 0}</td>
-                    <td>₹${e.pricing?.deposit || 0}</td>
-                    <td>${e.availability?.isAvailable ? '<span class="badge badge-success">Yes</span>' : '<span class="badge badge-danger">No</span>'}</td>
-                </tr>`;
-            });
-            html += '</table></div>';
-            document.getElementById('content').innerHTML = html;
-        }
-
-        function renderAds(data) {
-            if (!data?.ads?.length) {
-                document.getElementById('content').innerHTML = '<div class="card"><h3>📢 Ads</h3><div class="empty">No active ads</div></div>';
-                return;
-            }
-            let html = `<div class="card"><h3>📢 Active Ads (${data.ads.length})</h3><table><tr><th>Title</th><th>Placement</th><th>Budget</th><th>Clicks</th><th>Status</th><th>Action</th></tr>`;
-            data.ads.forEach(a => {
-                const statusColor = a.status === 'active' ? 'badge-success' : a.status === 'pending' ? 'badge-warning' : 'badge-danger';
-                html += `<tr>
-                    <td><strong>${a.title || 'N/A'}</strong></td>
-                    <td><span class="badge badge-info">${a.placement || 'home'}</span></td>
-                    <td>₹${a.budget || 0}</td>
-                    <td>${a.clicks || 0}</td>
-                    <td><span class="badge ${statusColor}">${a.status}</span></td>
-                    <td><button class="btn btn-blue" onclick="showDetail('ad', '${a._id}')">View</button></td>
-                </tr>`;
-            });
-            html += '</table></div>';
-            document.getElementById('content').innerHTML = html;
-        }
-
-        function renderPayments(data) {
-            if (!data?.payments?.length) {
-                document.getElementById('content').innerHTML = '<div class="card"><h3>💳 Payments</h3><div class="empty">No payments found</div></div>';
-                return;
-            }
-            let html = `<div class="card"><h3>💳 Recent Payments (${data.payments.length})</h3><table><tr><th>Amount</th><th>UTR</th><th>Status</th><th>Confirmed</th><th>Date</th><th>Action</th></tr>`;
-            data.payments.forEach(p => {
-                const statusColor = p.status === 'completed' ? 'badge-success' : p.status === 'pending_verification' ? 'badge-warning' : 'badge-info';
-                html += `<tr>
-                    <td><strong>₹${p.amount || 0}</strong></td>
-                    <td>${p.utrNumber || 'N/A'}</td>
-                    <td><span class="badge ${statusColor}">${p.status}</span></td>
-                    <td>${p.userConfirmed ? '✅' : '❌'}</td>
-                    <td>${new Date(p.createdAt).toLocaleDateString()}</td>
-                    <td>
-                        ${p.status === 'pending_verification' ? `<button class="btn btn-green" onclick="verifyPayment('${p.id}')">Verify</button>` : ''}
-                    </td>
-                </tr>`;
-            });
-            html += '</table></div>';
-            document.getElementById('content').innerHTML = html;
-        }
-
-        function renderProblems(data) {
-            if (!data?.problems?.length) {
-                document.getElementById('content').innerHTML = '<div class="card"><h3>🌿 Problems</h3><div class="empty">No problems posted</div></div>';
-                return;
-            }
-            let html = `<div class="card"><h3>🌿 Problems (${data.problems.length})</h3><table><tr><th>Title</th><th>Crop</th><th>Upvotes</th><th>Solutions</th><th>Date</th></tr>`;
-            data.problems.forEach(p => {
-                html += `<tr>
-                    <td><strong>${p.title || 'N/A'}</strong></td>
-                    <td><span class="badge badge-success">${p.cropType || 'N/A'}</span></td>
-                    <td>👍 ${p.upvotes || 0}</td>
-                    <td>💬 ${p.solutionCount || 0}</td>
-                    <td>${new Date(p.createdAt).toLocaleDateString()}</td>
-                </tr>`;
-            });
-            html += '</table></div>';
-            document.getElementById('content').innerHTML = html;
-        }
-
-        function renderShops(data) {
-            if (!data?.shops?.length) {
-                document.getElementById('content').innerHTML = '<div class="card"><h3>🏪 Fertilizer Shops</h3><div class="empty">No shops listed</div></div>';
-                return;
-            }
-            let html = `<div class="card"><h3>🏪 Fertilizer Shops (${data.shops.length})</h3><table><tr><th>Name</th><th>Owner</th><th>Phone</th><th>Village</th><th>Rating</th></tr>`;
-            data.shops.forEach(s => {
-                html += `<tr>
-                    <td><strong>${s.name || 'N/A'}</strong></td>
-                    <td>${s.ownerName || 'N/A'}</td>
-                    <td>${s.phone || 'N/A'}</td>
-                    <td>${s.location?.village || 'N/A'}</td>
-                    <td>⭐ ${s.rating || 0} (${s.totalRatings || 0})</td>
-                </tr>`;
-            });
-            html += '</table></div>';
-            document.getElementById('content').innerHTML = html;
-        }
-
-        function showDetail(type, id) {
-            const modal = document.getElementById('detailModal');
-            const content = document.getElementById('modalContent');
-            content.innerHTML = `<h3>Details</h3><p>ID: ${id}</p><p>Type: ${type}</p>`;
-            modal.classList.add('active');
-        }
-
-        async function verifyPayment(id) {
-            if (!confirm('Verify this payment? This will activate the ad.')) return;
-            try {
-                const res = await fetch(`${API}/api/payments/${id}/verify`, { method: 'PUT' });
-                const data = await res.json();
-                if (data.success) { alert('Payment verified!'); fetchAll(); }
-                else { alert('Error: ' + (data.error || 'Unknown')); }
-            } catch (e) { alert('Failed to verify payment'); }
-        }
-
-        document.getElementById('detailModal').addEventListener('click', function(e) {
-            if (e.target === this) this.classList.remove('active');
+    // Setup/Register Admin
+    document.getElementById('setupSubmit').addEventListener('click', async () => {
+      const username = document.getElementById('setupUsername').value.trim();
+      const email = document.getElementById('setupEmail').value.trim();
+      const password = document.getElementById('setupPassword').value;
+      const setupKey = document.getElementById('setupKey').value.trim();
+      const messageEl = document.getElementById('setupMessage');
+      messageEl.textContent = '';
+      messageEl.className = '';
+      
+      if (!username || !email || !password || !setupKey) {
+        messageEl.textContent = 'All fields are required';
+        messageEl.className = 'error-message';
+        return;
+      }
+      
+      try {
+        const data = await api('/api/admin/setup', 'POST', {
+          setupKey,
+          username,
+          password,
+          email
         });
+        
+        if (data.success) {
+          messageEl.textContent = 'Admin account created successfully! You can now login.';
+          messageEl.className = 'success-message';
+          
+          // Clear form
+          document.getElementById('setupUsername').value = '';
+          document.getElementById('setupEmail').value = '';
+          document.getElementById('setupPassword').value = '';
+          
+          // Switch to login after 2 seconds
+          setTimeout(() => {
+            document.getElementById('showLoginLink').click();
+          }, 2000);
+        } else {
+          messageEl.textContent = data.error || 'Setup failed';
+          messageEl.className = 'error-message';
+        }
+      } catch (e) {
+        messageEl.textContent = e.message || 'Connection error';
+        messageEl.className = 'error-message';
+      }
+    });
 
-        // Initial load
-        fetchAll();
-    </script>
+    // Toggle between login and setup
+    document.getElementById('showSetupLink').addEventListener('click', () => {
+      loginScreen.classList.add('hidden');
+      setupScreen.classList.remove('hidden');
+    });
+    
+    document.getElementById('showLoginLink').addEventListener('click', () => {
+      setupScreen.classList.add('hidden');
+      loginScreen.classList.remove('hidden');
+    });
+
+    // Logout
+    logoutBtn.addEventListener('click', () => {
+      authToken = '';
+      localStorage.removeItem('adminToken');
+      checkAuth();
+    });
+
+    // Navigation
+    navItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        document.querySelector('.nav-item.active')?.classList.remove('active');
+        item.classList.add('active');
+        const page = item.dataset.page;
+        loadPage(page);
+      });
+    });
+
+    // Load page content
+    async function loadPage(page) {
+      if (!authToken) {
+        checkAuth();
+        return;
+      }
+      
+      const content = document.getElementById('appContent');
+      content.innerHTML = '<p style="padding:2rem;">Loading...</p>';
+      
+      try {
+        switch(page) {
+          case 'dashboard': await renderDashboard(content); break;
+          case 'users': await renderUsers(content); break;
+          case 'ads': await renderAds(content); break;
+          case 'payments': await renderPayments(content); break;
+          case 'reports': await renderReports(content); break;
+          case 'equipment': await renderEquipment(content); break;
+          case 'shops': await renderShops(content); break;
+          default: content.innerHTML = '<p>Page not found.</p>';
+        }
+      } catch (err) {
+        content.innerHTML = `<p>Error loading page: ${err.message}</p>`;
+        if (err.message.includes('Authentication') || err.message.includes('token')) {
+          authToken = '';
+          localStorage.removeItem('adminToken');
+          checkAuth();
+        }
+      }
+    }
+
+    // Render Dashboard
+    async function renderDashboard(container) {
+      try {
+        const stats = await api('/api/admin/stats');
+        if (!stats.success) throw new Error('Failed to load stats');
+        const s = stats.stats;
+        
+        container.innerHTML = `
+          <div class="top-bar">
+            <h2 class="page-title">Dashboard</h2>
+            <span class="admin-badge">Admin</span>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-value">${s.totalUsers || 0}</div>
+              <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">${s.activeLabourers || 0}</div>
+              <div class="stat-label">Active Labourers</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">${s.totalEquipment || 0}</div>
+              <div class="stat-label">Equipment</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">${s.totalProduce || 0}</div>
+              <div class="stat-label">Produce Listings</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">${s.pendingPayments || 0}</div>
+              <div class="stat-label">Pending Payments</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">${s.activeAds || 0}</div>
+              <div class="stat-label">Active Ads</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">${s.totalBookings || 0}</div>
+              <div class="stat-label">Pending Bookings</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">${s.pendingReports || 0}</div>
+              <div class="stat-label">Pending Reports</div>
+            </div>
+          </div>
+        `;
+      } catch (e) {
+        container.innerHTML = `<p>Error: ${e.message}</p>`;
+      }
+    }
+
+    // Render Users
+    async function renderUsers(container) {
+      try {
+        const data = await api('/api/admin/users?limit=50');
+        const users = data.users || [];
+        
+        container.innerHTML = `
+          <div class="top-bar">
+            <h2 class="page-title">Users</h2>
+            <span class="admin-badge">${users.length} users</span>
+          </div>
+          <div class="section-card">
+            <div style="overflow-x:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Verified</th>
+                    <th>Active</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${users.map(u => `
+                    <tr>
+                      <td>${u.profile?.name || 'N/A'}</td>
+                      <td>${u.email || 'N/A'}</td>
+                      <td>${u.profile?.phone || '-'}</td>
+                      <td>${u.role || 'farmer'}</td>
+                      <td>${u.verification?.isVerified ? '✅' : '❌'}</td>
+                      <td>${u.isActive ? '✅' : '❌'}</td>
+                      <td>
+                        <button class="btn-sm" onclick="window.toggleUser('${u._id}')">
+                          ${u.isActive ? 'Deactivate' : 'Activate'}
+                        </button>
+                        ${!u.verification?.isVerified ? 
+                          `<button class="btn-sm" onclick="window.verifyUser('${u._id}')" style="margin-left:4px;">Verify</button>` 
+                          : ''}
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+        
+        window.toggleUser = async (id) => {
+          try {
+            await api(`/api/admin/users/${id}/toggle`, 'PUT');
+            loadPage('users');
+          } catch (e) {
+            alert('Error: ' + e.message);
+          }
+        };
+        
+        window.verifyUser = async (id) => {
+          try {
+            await api(`/api/admin/users/${id}/verify`, 'PUT');
+            loadPage('users');
+          } catch (e) {
+            alert('Error: ' + e.message);
+          }
+        };
+      } catch (e) {
+        container.innerHTML = `<p>Error: ${e.message}</p>`;
+      }
+    }
+
+    // Render Ads
+    async function renderAds(container) {
+      try {
+        const data = await api('/api/admin/ads?limit=50');
+        const ads = data.ads || [];
+        
+        container.innerHTML = `
+          <div class="top-bar">
+            <h2 class="page-title">Advertisements</h2>
+            <span class="admin-badge">${ads.length} ads</span>
+          </div>
+          <div class="section-card">
+            <div style="overflow-x:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Advertiser</th>
+                    <th>Type</th>
+                    <th>Budget</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${ads.map(ad => `
+                    <tr>
+                      <td>${ad.title || 'Untitled'}</td>
+                      <td>${ad.advertiserId?.profile?.name || 'N/A'}</td>
+                      <td>${ad.type || 'banner'}</td>
+                      <td>₹${ad.budget || 0}</td>
+                      <td><span class="status-badge">${ad.status}</span></td>
+                      <td><span class="status-badge">${ad.paymentStatus || 'pending'}</span></td>
+                      <td>
+                        <select onchange="window.updateAdStatus('${ad._id}', this.value)" style="padding:0.3rem;">
+                          <option value="">Change Status</option>
+                          <option value="active">Active</option>
+                          <option value="paused">Paused</option>
+                          <option value="completed">Complete</option>
+                          <option value="rejected">Reject</option>
+                        </select>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+        
+        window.updateAdStatus = async (id, status) => {
+          if (!status) return;
+          try {
+            await api(`/api/admin/ads/${id}/status`, 'PUT', { status });
+            loadPage('ads');
+          } catch (e) {
+            alert('Error: ' + e.message);
+          }
+        };
+      } catch (e) {
+        container.innerHTML = `<p>Error: ${e.message}</p>`;
+      }
+    }
+
+    // Render Payments
+    async function renderPayments(container) {
+      try {
+        const data = await api('/api/admin/payments?limit=50');
+        const payments = data.payments || [];
+        
+        container.innerHTML = `
+          <div class="top-bar">
+            <h2 class="page-title">Payments</h2>
+            <span class="admin-badge">${payments.length} payments</span>
+          </div>
+          <div class="section-card">
+            <div style="overflow-x:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Amount</th>
+                    <th>UTR</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${payments.map(p => `
+                    <tr>
+                      <td>${p.userId?.profile?.name || 'N/A'}</td>
+                      <td>₹${p.amount || 0}</td>
+                      <td>${p.utrNumber || '-'}</td>
+                      <td><span class="status-badge">${p.status}</span></td>
+                      <td>
+                        ${p.status === 'pending_verification' ? `
+                          <button class="btn-sm" onclick="window.verifyPayment('${p._id}')">✅ Approve</button>
+                          <button class="btn-sm btn-danger" onclick="window.rejectPayment('${p._id}')" style="margin-left:4px;">❌ Reject</button>
+                        ` : '-'}
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+        
+        window.verifyPayment = async (id) => {
+          try {
+            await api(`/api/admin/payments/${id}/verify`, 'PUT');
+            loadPage('payments');
+          } catch (e) {
+            alert('Error: ' + e.message);
+          }
+        };
+        
+        window.rejectPayment = async (id) => {
+          if (!confirm('Are you sure you want to reject this payment?')) return;
+          try {
+            await api(`/api/admin/payments/${id}/reject`, 'PUT');
+            loadPage('payments');
+          } catch (e) {
+            alert('Error: ' + e.message);
+          }
+        };
+      } catch (e) {
+        container.innerHTML = `<p>Error: ${e.message}</p>`;
+      }
+    }
+
+    // Render Reports
+    async function renderReports(container) {
+      try {
+        const data = await api('/api/admin/reports?limit=50');
+        const reports = data.reports || [];
+        
+        container.innerHTML = `
+          <div class="top-bar">
+            <h2 class="page-title">Reports</h2>
+            <span class="admin-badge">${reports.length} reports</span>
+          </div>
+          <div class="section-card">
+            <div style="overflow-x:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Reporter</th>
+                    <th>Type</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${reports.map(r => `
+                    <tr>
+                      <td>${r.reporterId?.profile?.name || 'N/A'}</td>
+                      <td>${r.type}</td>
+                      <td>${r.reason}</td>
+                      <td><span class="status-badge">${r.status}</span></td>
+                      <td>
+                        <select onchange="window.updateReportStatus('${r._id}', this.value)" style="padding:0.3rem;">
+                          <option value="">Update</option>
+                          <option value="reviewed">Reviewed</option>
+                          <option value="resolved">Resolved</option>
+                        </select>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+        
+        window.updateReportStatus = async (id, status) => {
+          if (!status) return;
+          try {
+            await api(`/api/admin/reports/${id}`, 'PUT', { status });
+            loadPage('reports');
+          } catch (e) {
+            alert('Error: ' + e.message);
+          }
+        };
+      } catch (e) {
+        container.innerHTML = `<p>Error: ${e.message}</p>`;
+      }
+    }
+
+    // Render Equipment
+    async function renderEquipment(container) {
+      try {
+        const data = await api('/api/admin/equipment?limit=50');
+        const equipment = data.equipment || [];
+        
+        container.innerHTML = `
+          <div class="top-bar">
+            <h2 class="page-title">Equipment</h2>
+            <span class="admin-badge">${equipment.length} items</span>
+          </div>
+          <div class="section-card">
+            <div style="overflow-x:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Owner</th>
+                    <th>Price/Day</th>
+                    <th>Verified</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${equipment.map(e => `
+                    <tr>
+                      <td>${e.name || 'N/A'}</td>
+                      <td>${e.category || 'N/A'}</td>
+                      <td>${e.ownerId?.profile?.name || 'N/A'}</td>
+                      <td>₹${e.pricing?.perDay || 0}</td>
+                      <td>${e.isVerified ? '✅' : '❌'}</td>
+                      <td>
+                        ${!e.isVerified ? 
+                          `<button class="btn-sm" onclick="window.verifyEquipment('${e._id}')">Verify</button>` 
+                          : '-'}
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+        
+        window.verifyEquipment = async (id) => {
+          try {
+            await api(`/api/admin/equipment/${id}/verify`, 'PUT');
+            loadPage('equipment');
+          } catch (e) {
+            alert('Error: ' + e.message);
+          }
+        };
+      } catch (e) {
+        container.innerHTML = `<p>Error: ${e.message}</p>`;
+      }
+    }
+
+    // Render Shops
+    async function renderShops(container) {
+      try {
+        const data = await api('/api/admin/shops?limit=50');
+        const shops = data.shops || [];
+        
+        container.innerHTML = `
+          <div class="top-bar">
+            <h2 class="page-title">Fertilizer Shops</h2>
+            <span class="admin-badge">${shops.length} shops</span>
+          </div>
+          <div class="section-card">
+            <div style="overflow-x:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Shop Name</th>
+                    <th>Owner</th>
+                    <th>Village</th>
+                    <th>District</th>
+                    <th>Rating</th>
+                    <th>Verified</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${shops.map(s => `
+                    <tr>
+                      <td>${s.name || 'N/A'}</td>
+                      <td>${s.ownerName || 'N/A'}</td>
+                      <td>${s.location?.village || 'N/A'}</td>
+                      <td>${s.location?.district || 'N/A'}</td>
+                      <td>⭐ ${s.rating || 0} (${s.totalRatings || 0})</td>
+                      <td>${s.isVerified ? '✅' : '❌'}</td>
+                      <td>
+                        ${!s.isVerified ? 
+                          `<button class="btn-sm" onclick="window.verifyShop('${s._id}')">Verify</button>` 
+                          : '-'}
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+        
+        window.verifyShop = async (id) => {
+          try {
+            await api(`/api/admin/shops/${id}/verify`, 'PUT');
+            loadPage('shops');
+          } catch (e) {
+            alert('Error: ' + e.message);
+          }
+        };
+      } catch (e) {
+        container.innerHTML = `<p>Error: ${e.message}</p>`;
+      }
+    }
+
+    // Initialize
+    checkAuth();
+  </script>
 </body>
 </html>
